@@ -5,5 +5,7 @@
     "install_msg": "Tnx for installing the cog. U can always find me on RedBot Discord Server, if you need help",
     "short": "This x does not exists",
     "tags": ["generator", "thisdoesnotexists"],
-    "type": "COG"
+    "type": "COG",
+    "min_python_version": [3, 9, 0],
+    "min_bot_version": "3.4.0"
 }
