@@ -13,7 +13,10 @@ class Settings:
         "city": ("satellite", "thiscitydoesnotexist"),
         "waifu": ("thiswaifudoesnotexist", ),
         "beach": ("thisbeachdoesnotexist", ),
-        "pony": ("thisponydoesnotexist", "thismlpdoesnotexists")
+        "pony": ("thisponydoesnotexist", "thismlpdoesnotexists"),
+        "eye": ("thiseyedoesnotexist", ),
+        "sneaker": ("thissneakerdoesnotexist", ),
+        "pepe": ("thispepedoesnotexist", )
     }
 
     ART = 'OneImageGenerator(name="This Artwork Does Not Exist", url="https://thisartworkdoesnotexist.com/")'
@@ -76,4 +79,22 @@ class Settings:
         MIN_SEED: int = 1
         SEED_LEN: int = 4
         SOURCE_URL = "https://thisbeachdoesnotexist.com/data/seeds-075/{}.jpg"
+
+    class Sneaker:
+        NAME = "This Sneaker Does Not Exists"
+        URL = "https://thissneakerdoesnotexist.com"
+
+        SET_SIZE: int = 2000
+        MIN_SEED: int = 0
+        SEED_LEN: int = 1
+        SOURCE_URL = "https://thissneakerdoesnotexist.com/wp-content/plugins/sneaker-plugin/imsout2/3-3-2-{}.jpg"
+
+    class Pepe:
+        NAME = "This Pepe Does Not Exists"
+        URL = "https://www.thispepedoesnotexist.co.uk/"
+
+        SET_SIZE: int = 9759
+        MIN_SEED: int = 1
+        SEED_LEN: int = 1
+        SOURCE_URL = "https://raw.githubusercontent.com/meesey/meesey.github.io/main/out/pepe%20({}).png"
 

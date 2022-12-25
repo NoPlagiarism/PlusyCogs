@@ -1,11 +1,12 @@
 {
     "name": "Exists",
     "author": ["Albrt#3043"],
-    "description": "Compilation of generators a-like this {sth} does not exists. ",
-    "install_msg": "Tnx for installing the cog. U can always find me on RedBot Discord Server, if you need help",
+    "description": "Compilation of generators a-like \"This {sth} does not exists\". ",
+    "install_msg": "Tnx for installing the cog. U can always find me on RedBot Discord Server, if you need help\nCog does not collect any info about users or server",
     "short": "This x does not exists",
     "tags": ["generator", "thisdoesnotexists"],
     "type": "COG",
     "min_python_version": [3, 9, 0],
-    "min_bot_version": "3.4.0"
+    "min_bot_version": "3.4.0",
+    "end_user_data_statement": "This cog does not persistently store any data or metadata about users."
 }
