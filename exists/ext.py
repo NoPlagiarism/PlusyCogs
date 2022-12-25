@@ -1,6 +1,7 @@
 from redbot.core import commands
 from .config import Settings
 from .api import OneImageGenerator, SeedGenerator, CityGenerator, EyeGenerator
+from aiohttp import ClientError
 
 
 class Exists(commands.Cog):
@@ -14,6 +15,13 @@ class Exists(commands.Cog):
 
     async def red_get_data_for_user(self, **kwargs):
         return dict()
+
+    async def cog_command_error(self, ctx: commands.Context, error: commands.CommandError):
+        original = getattr(error, "original", None)
+        if original:
+            if isinstance(original, ClientError):
+                return ctx.send("Unexpected " + str(type(original)) + " occurred. Try again")
+        return await ctx.bot.on_command_error(ctx, error, unhandled_by_cog=True)
 
     async def one_image_generator(self, ctx, generator_eval):
         generator = eval(generator_eval)
