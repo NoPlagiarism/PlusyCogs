@@ -1,0 +1,12 @@
+{
+    "name": "va11halla-quotes",
+    "author": ["Albrt#3043"],
+    "description": "Random quotes from VN \"VA-11 HALL-A: Cyberpunk Bartender Action\"\nVN from quotes may include NSFW (18+) content",
+    "short": "Quotes from VA-11 HALL-A",
+    "install_msg": "va11halla-quotes installed. Some of dialogue lines may be NSFW, so be careful :D",
+    "tags": ["quotes", "vn", "va11halla"],
+    "type": "COG",
+    "min_bot_version": "3.4.0",
+    "min_python_version": [3, 9, 0],
+    "hidden": true
+}
