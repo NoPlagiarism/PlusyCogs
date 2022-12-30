@@ -23,6 +23,7 @@ class Settings:
     CAT = 'OneImageGenerator(name="This Cat Does Not Exist", url="https://thiscatdoesnotexist.com/")'
     HORSE = 'OneImageGenerator(name="This Horse Does Not Exist", url="https://thishorsedoesnotexist.com/")'
     PERSON = 'OneImageGenerator(name="This Person Does Not Exist", url="https://thispersondoesnotexist.com", img_url="https://thispersondoesnotexist.com/image")'
+    TITS = 'OneImageGenerator(name="These tits do not exist", url="https://thesetitsdonotexist.com/", img_url="https://thesetitsdonotexist.com/img.png", nsfw=True)'
 
     """class SeedGenerator: NAME, URL, SET_SIZE, MIN_SEED, SEED_LEN, SOURCE_URL"""
 

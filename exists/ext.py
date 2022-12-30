@@ -1,8 +1,14 @@
+import discord
 from redbot.core import commands, Config
 from .config import Settings
 from .api import OneImageGenerator, SeedGenerator, CityGenerator, EyeGenerator
 from aiohttp import ClientError
 import functools
+
+
+class NSFWCheckFailed(Exception):
+    def __str__(self):
+        return "NO HORNY!!!"
 
 
 async def command_check_blacklist(ctx):
@@ -23,7 +29,8 @@ class Exists(commands.Cog):
         self.bot = bot
         self.config = Config.get_conf(self, identifier=141012082000)  # Она утонула.
         default_guild = {
-            "blacklist": list()
+            "blacklist": list(),
+            "nsfw": False
         }
         self.config.register_guild(**default_guild)
         super(Exists, self).__init__()
@@ -32,12 +39,12 @@ class Exists(commands.Cog):
     async def exists_conf(self, ctx):
         pass
 
+    @commands.guild_only()
+    @commands.admin()
     @exists_conf.group(name="guild")
     async def conf_guild(self, ctx):
         pass
 
-    @commands.guild_only()
-    @commands.admin()
     @conf_guild.command(name="blacklist", aliases=("del", "rem"))
     async def exists_blacklist(self, ctx, remove: str):
         if remove == "clear":
@@ -55,6 +62,32 @@ class Exists(commands.Cog):
         await self.config.guild(ctx.guild).blacklist.set(blacklist)
         return await ctx.reply(msg)
 
+    @conf_guild.command(name="nsfw")
+    async def toggle_exists_nsfw(self, ctx):
+        old_value = await self.config.guild(ctx.guild).nsfw()
+        new_value = not old_value
+        await self.config.guild(ctx.guild).nsfw.set(new_value)
+        return await ctx.reply("NSFW is " + {True: "enabled", False: "disabled"}[new_value] + " in this guild")
+
+    @conf_guild.command(name="show")
+    async def guild_show(self, ctx):
+        blacklist = ", ".join(await self.config.guild(ctx.guild).blacklist()) if len(await self.config.guild(ctx.guild).blacklist()) > 0 else "Disabled"
+        nsfw = {True: "enabled", False: "disabled"}[await self.config.guild(ctx.guild).nsfw()]
+
+        return await ctx.send(
+            "Exists Guild Settings\n"
+            f"Blacklist: {blacklist}\n"
+            f"NSFW is {nsfw}"
+        )
+
+    async def can_post_nsfw(self, ctx):
+        if not ctx.channel.is_nsfw() and not isinstance(ctx.channel, discord.DMChannel):
+            return False
+        nsfw_guild = await self.config.guild(ctx.guild).nsfw()
+        if not nsfw_guild:
+            return True
+        return False
+
     async def red_delete_data_for_user(self, **kwargs):
         return None
 
@@ -65,11 +98,16 @@ class Exists(commands.Cog):
         original = getattr(error, "original", None)
         if original:
             if isinstance(original, ClientError):
-                return ctx.send("Unexpected " + str(type(original)) + " occurred. Try again")
+                return ctx.reply("Unexpected " + str(type(original)) + " occurred. Try again")
+            elif isinstance(original, NSFWCheckFailed):
+                return ctx.reply(str(original))
         return await ctx.bot.on_command_error(ctx, error, unhandled_by_cog=True)
 
     async def one_image_generator(self, ctx, generator_eval):
         generator = eval(generator_eval)
+        if generator.nsfw:
+            if not await self.can_post_nsfw(ctx):
+                raise NSFWCheckFailed()
         return await ctx.send(embed=await generator.get_embed(), file=await generator.get_image())
 
     async def seed_generator(self, ctx, seed, meta):
@@ -77,6 +115,9 @@ class Exists(commands.Cog):
             if not (meta.MIN_SEED <= seed <= meta.SET_SIZE):
                 return await ctx.reply("Send a number in range from {} to {}".format(meta.MIN_SEED, meta.SET_SIZE))
         generator = SeedGenerator(meta)
+        if generator.nsfw:
+            if not await self.can_post_nsfw(ctx):
+                raise NSFWCheckFailed()
         return await ctx.send(embed=generator.get_embed(seed))
 
     @commands.check(command_check_blacklist)
@@ -169,6 +210,14 @@ class Exists(commands.Cog):
         """Eye generator from https://thiseyedoesnotexist.com/"""
         return await ctx.send(embed=await EyeGenerator().get_embed())
 
+    @commands.check(command_check_blacklist)
+    @commands.is_nsfw()
+    @exists.command(aliases=("boobs", "thesetitsdonotexist"))
+    async def tits(self, ctx):
+        """Tits generators from https://thesetitsdonotexist.com/"""
+        # JUST FKING KILL ME, LMFAO XD
+        return await self.one_image_generator(ctx, Settings.TITS)
+
     if not Settings.ONLY_COMMAND_GROUP:
         @commands.check(command_check_blacklist)
         @commands.command(name="cat", aliases=Settings.ALIASES['cat'])
@@ -253,3 +302,11 @@ class Exists(commands.Cog):
         async def ex_eye(self, ctx):
             """Eye generator from https://thiseyedoesnotexist.com/"""
             return await ctx.send(embed=await EyeGenerator().get_embed())
+
+        @commands.check(command_check_blacklist)
+        @commands.is_nsfw()
+        @commands.command(aliases=("boobs", "thesetitsdonotexist"))
+        async def tits(self, ctx):
+            """Tits generators from https://thesetitsdonotexist.com/"""
+            # PLS KILL ME!
+            return await self.one_image_generator(ctx, Settings.TITS)

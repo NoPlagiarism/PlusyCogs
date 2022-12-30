@@ -20,8 +20,11 @@ random.seed(time())
 
 class GetGenerator:
     """Generator init and get_embed stub"""
-    name: str  # Name of generator
-    url: str   # Generator url
+    name: str   # Name of generator
+    url: str    # Generator url
+    nsfw: bool  # Is generator NSFW related
+
+    nsfw = False  # False by default
 
     def __init__(self, **kwargs):
         self.__dict__.update(kwargs)
@@ -69,6 +72,8 @@ class SeedMeta:
     SEED_LEN: int
     SOURCE_URL: str
 
+    NSFW: bool = False
+
 
 class SeedGenerator(GetGenerator):
     """Seed Generator a-like Arfafax's websites (https://github.com/arfafax) or other webs
@@ -77,7 +82,7 @@ class SeedGenerator(GetGenerator):
     meta: SeedMeta
 
     def __init__(self, meta):
-        kwargs = {"url": meta.URL, "name": meta.NAME}
+        kwargs = {"url": meta.URL, "name": meta.NAME, "nsfw": meta.NSFW}
         super(SeedGenerator, self).__init__(**kwargs)
         self.meta = meta
 
