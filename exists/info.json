@@ -2,7 +2,7 @@
     "name": "Exists",
     "author": ["Albrt#3043"],
     "description": "Compilation of generators a-like \"This {sth} does not exists\". ",
-    "install_msg": "Tnx for installing the cog. U can always find me on RedBot Discord Server, if you need help\nCog does not collect any info about users or server",
+    "install_msg": "Tnx for installing the cog. U can always find me on RedBot Discord Server, if you need help\nCog does not collect any info about users, but collects server's preferences",
     "short": "This x does not exists",
     "tags": ["generator", "thisdoesnotexists"],
     "type": "COG",

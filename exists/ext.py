@@ -1,14 +1,59 @@
-from redbot.core import commands
+from redbot.core import commands, Config
 from .config import Settings
 from .api import OneImageGenerator, SeedGenerator, CityGenerator, EyeGenerator
 from aiohttp import ClientError
+import functools
+
+
+async def command_check_blacklist(ctx):
+    command_name = ctx.command.name
+    cog = ctx.command.cog
+    if command_name not in Settings.ALIASES.keys():
+        return
+    blacklist = await cog.config.guild(ctx.guild).blacklist()
+    if command_name in blacklist:
+        await ctx.reply("Generator has been disabled on this server")
+        return False
+    return True
 
 
 class Exists(commands.Cog):
     """This x does not Exists cog"""
     def __init__(self, bot: commands.Bot):
         self.bot = bot
+        self.config = Config.get_conf(self, identifier=141012082000)  # Она утонула.
+        default_guild = {
+            "blacklist": list()
+        }
+        self.config.register_guild(**default_guild)
         super(Exists, self).__init__()
+
+    @commands.group(name="exists-config")
+    async def exists_conf(self, ctx):
+        pass
+
+    @exists_conf.group(name="guild")
+    async def conf_guild(self, ctx):
+        pass
+
+    @commands.guild_only()
+    @commands.admin()
+    @conf_guild.command(name="blacklist", aliases=("del", "rem"))
+    async def exists_blacklist(self, ctx, remove: str):
+        if remove == "clear":
+            await self.config.guild(ctx.guild).blacklist.set(list())
+            return await ctx.reply("Blacklist cleared")
+        if remove not in Settings.ALIASES:
+            return await ctx.reply("Wrong generator")
+        blacklist = await self.config.guild(ctx.guild).blacklist()
+        if remove not in blacklist:
+            blacklist.append(remove)
+            msg = "Generator added to blacklist"
+        else:
+            blacklist.remove(remove)
+            msg = "Generator removed from blacklist"
+        await self.config.guild(ctx.guild).blacklist.set(blacklist)
+        return await ctx.reply(msg)
 
     async def red_delete_data_for_user(self, **kwargs):
         return None
@@ -34,148 +79,177 @@ class Exists(commands.Cog):
         generator = SeedGenerator(meta)
         return await ctx.send(embed=generator.get_embed(seed))
 
+    @commands.check(command_check_blacklist)
     @commands.group(aliases=Settings.ALIASES['exists'])
     async def exists(self, ctx):
         """Compilation of generators like thisxdoesnotexists"""
         pass
 
+    @commands.check(command_check_blacklist)
     @exists.command(name="cat", aliases=Settings.ALIASES['cat'])
     async def cat(self, ctx):
         """Cat generator from https://thiscatdoesnotexist.com"""
         return await self.one_image_generator(ctx, Settings.CAT)
 
+    @commands.check(command_check_blacklist)
     @exists.command(name="horse", aliases=Settings.ALIASES['horse'])
     async def horse(self, ctx):
         """Horse generator from https://thishorsedoesnotexist.com"""
         return await self.one_image_generator(ctx, Settings.HORSE)
 
+    @commands.check(command_check_blacklist)
     @exists.command(name="art", aliases=Settings.ALIASES['art'])
     async def art(self, ctx):
         """Art generator from https://thisartworkdoesnotexist.com"""
         return await self.one_image_generator(ctx, Settings.ART)
 
+    @commands.check(command_check_blacklist)
     @exists.command(name="person", aliases=Settings.ALIASES['person'])
     async def person(self, ctx):
         """Human face generator from https://thispersondoesnotexist.com"""
         return await self.one_image_generator(ctx, Settings.PERSON)
 
+    @commands.check(command_check_blacklist)
     @exists.command(name="fursona", aliases=Settings.ALIASES['fursona'])
     async def fursona(self, ctx,  seed: int = None):
         """Furry generator from https://thisfursonadoesnotexist.com"""
         return await self.seed_generator(ctx, seed, Settings.Fursona)
 
+    @commands.check(command_check_blacklist)
     @exists.command(name="pony", aliases=Settings.ALIASES['pony'])
     async def pony(self, ctx,  seed: int = None):
         """Pony generator from https://thisponydoesnotexist.net"""
         return await self.seed_generator(ctx, seed, Settings.Pony)
 
+    @commands.check(command_check_blacklist)
     @exists.command(name="nightsky", aliases=Settings.ALIASES['nightsky'])
     async def night_sky(self, ctx, seed: int = None):
         """Night sky generator from https://arthurfindelair.com/thisnightskydoesnotexist"""
         return await self.seed_generator(ctx, seed, Settings.NightSky)
 
+    @commands.check(command_check_blacklist)
     @exists.command(name="map", aliases=Settings.ALIASES['map'])
     async def map(self, ctx, seed: int = None):
         """Map generator from http://thismapdoesnotexist.com"""
         return await self.seed_generator(ctx, seed, Settings.Map)
 
+    @commands.check(command_check_blacklist)
     @exists.command(name="waifu", aliases=Settings.ALIASES['waifu'])
     async def waifu(self, ctx, seed: int = None):
         """Anime waifu generator from https://thiswaifudoesnotexist.net"""
         return await self.seed_generator(ctx, seed, Settings.Waifu)
 
+    @commands.check(command_check_blacklist)
     @exists.command(name="beach", aliases=Settings.ALIASES['beach'])
     async def beach(self, ctx, seed: int = None):
         """Beach generator from https://thisbeachdoesnotexist.com"""
         return await self.seed_generator(ctx, seed, Settings.Beach)
 
+    @commands.check(command_check_blacklist)
     @exists.command(name="sneaker", aliases=Settings.ALIASES['sneaker'])
     async def sneaker(self, ctx, seed: int = None):
         """Sneaker generator from https://thissneakerdoesnotexist.com"""
         return await self.seed_generator(ctx, seed, Settings.Sneaker)
 
+    @commands.check(command_check_blacklist)
     @exists.command(name="pepe", aliases=Settings.ALIASES['pepe'])
     async def pepe(self, ctx, seed: int = None):
         """Pepe generator from https://www.thispepedoesnotexist.co.uk"""
         return await self.seed_generator(ctx, seed, Settings.Pepe)
 
+    @commands.check(command_check_blacklist)
     @exists.command(name="city", aliases=Settings.ALIASES['city'])
     async def city(self, ctx):
         """Satellite city shot generator from http://thiscitydoesnotexist.com"""
         return await ctx.send(embed=await CityGenerator().get_embed())
 
+    @commands.check(command_check_blacklist)
     @exists.command(aliases=("thiseyedoesnotexist", ))
     async def eye(self, ctx):
         """Eye generator from https://thiseyedoesnotexist.com/"""
         return await ctx.send(embed=await EyeGenerator().get_embed())
 
     if not Settings.ONLY_COMMAND_GROUP:
+        @commands.check(command_check_blacklist)
         @commands.command(name="cat", aliases=Settings.ALIASES['cat'])
-        async def cat(self, ctx):
+        async def ex_cat(self, ctx):
             """Cat generator from https://thiscatdoesnotexist.com"""
             return await self.one_image_generator(ctx, Settings.CAT)
 
+        @commands.check(command_check_blacklist)
         @commands.command(name="horse", aliases=Settings.ALIASES['horse'])
-        async def horse(self, ctx):
+        async def ex_horse(self, ctx):
             """Horse generator from https://thishorsedoesnotexist.com"""
             return await self.one_image_generator(ctx, Settings.HORSE)
 
+        @commands.check(command_check_blacklist)
         @commands.command(name="art", aliases=Settings.ALIASES['art'])
-        async def art(self, ctx):
+        async def ex_art(self, ctx):
             """Art generator from https://thisartworkdoesnotexist.com"""
             return await self.one_image_generator(ctx, Settings.ART)
 
+        @commands.check(command_check_blacklist)
         @commands.command(name="person", aliases=Settings.ALIASES['person'])
-        async def person(self, ctx):
+        async def ex_person(self, ctx):
             """Human face generator from https://thispersondoesnotexist.com"""
             return await self.one_image_generator(ctx, Settings.PERSON)
 
+        @commands.check(command_check_blacklist)
         @commands.command(name="fursona", aliases=Settings.ALIASES['fursona'])
-        async def fursona(self, ctx, seed: int = None):
+        async def ex_fursona(self, ctx, seed: int = None):
             """Furry generator from https://thisfursonadoesnotexist.com"""
             return await self.seed_generator(ctx, seed, Settings.Fursona)
 
+        @commands.check(command_check_blacklist)
         @commands.command(name="pony", aliases=Settings.ALIASES['pony'])
-        async def pony(self, ctx, seed: int = None):
+        async def ex_pony(self, ctx, seed: int = None):
             """Pony generator from https://thisponydoesnotexist.net"""
             return await self.seed_generator(ctx, seed, Settings.Pony)
 
+        @commands.check(command_check_blacklist)
         @commands.command(name="nightsky", aliases=Settings.ALIASES['nightsky'])
-        async def night_sky(self, ctx, seed: int = None):
+        async def ex_night_sky(self, ctx, seed: int = None):
             """Night sky generator from https://arthurfindelair.com/thisnightskydoesnotexist"""
             return await self.seed_generator(ctx, seed, Settings.NightSky)
 
+        @commands.check(command_check_blacklist)
         @commands.command(name="map", aliases=Settings.ALIASES['map'])
-        async def map(self, ctx, seed: int = None):
+        async def ex_map(self, ctx, seed: int = None):
             """Map generator from http://thismapdoesnotexist.com"""
             return await self.seed_generator(ctx, seed, Settings.Map)
 
+        @commands.check(command_check_blacklist)
         @commands.command(name="waifu", aliases=Settings.ALIASES['waifu'])
-        async def waifu(self, ctx, seed: int = None):
+        async def ex_waifu(self, ctx, seed: int = None):
             """Anime waifu generator from https://thiswaifudoesnotexist.net"""
             return await self.seed_generator(ctx, seed, Settings.Waifu)
 
+        @commands.check(command_check_blacklist)
         @commands.command(name="beach", aliases=Settings.ALIASES['beach'])
-        async def beach(self, ctx, seed: int = None):
+        async def ex_beach(self, ctx, seed: int = None):
             """Beach generator from https://thisbeachdoesnotexist.com"""
             return await self.seed_generator(ctx, seed, Settings.Beach)
 
+        @commands.check(command_check_blacklist)
         @commands.command(name="sneaker", aliases=Settings.ALIASES['sneaker'])
-        async def sneaker(self, ctx, seed: int = None):
+        async def ex_sneaker(self, ctx, seed: int = None):
             """Sneaker generator from https://thissneakerdoesnotexist.com"""
             return await self.seed_generator(ctx, seed, Settings.Sneaker)
 
+        @commands.check(command_check_blacklist)
         @commands.command(name="pepe", aliases=Settings.ALIASES['pepe'])
-        async def pepe(self, ctx, seed: int = None):
+        async def ex_pepe(self, ctx, seed: int = None):
             """Pepe generator from https://www.thispepedoesnotexist.co.uk"""
             return await self.seed_generator(ctx, seed, Settings.Pepe)
 
+        @commands.check(command_check_blacklist)
         @commands.command(name="city", aliases=Settings.ALIASES['city'])
-        async def city(self, ctx):
+        async def ex_city(self, ctx):
             """Satellite city shot generator from http://thiscitydoesnotexist.com"""
             return await ctx.send(embed=await CityGenerator().get_embed())
 
+        @commands.check(command_check_blacklist)
         @commands.command(aliases=("thiseyedoesnotexist",))
-        async def eye(self, ctx):
+        async def ex_eye(self, ctx):
             """Eye generator from https://thiseyedoesnotexist.com/"""
             return await ctx.send(embed=await EyeGenerator().get_embed())
