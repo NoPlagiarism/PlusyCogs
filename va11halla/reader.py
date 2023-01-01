@@ -42,12 +42,15 @@ class Dialogue:
     text: str
     line: int
 
-    def __init__(self, script, character, line, text):
+    lang: str = None
+
+    def __init__(self, script, character, line, text, lang=None):
         if type(script) is not Script:
             self.script = Script(script)
         else:
             self.script = script
         self.character, self.line, self.text = character, line, text
+        self.lang = lang
 
     def __repr__(self):
         return f'"{self.character}: {self.text}" on line: {self.line}'
@@ -56,12 +59,12 @@ class Dialogue:
         return self.text
 
     @staticmethod
-    def from_grouped_dial(raw_dict, character):
-        return Dialogue(raw_dict['script'], character, raw_dict['line'], raw_dict['text'])
+    def from_grouped_dial(raw_dict, character, lang=None):
+        return Dialogue(raw_dict['script'], character, raw_dict['line'], raw_dict['text'], lang=lang)
 
     @staticmethod
-    def from_scripts_dial(raw_dict, script):
-        return Dialogue(script, raw_dict['character'], raw_dict['line'], raw_dict['text'])
+    def from_scripts_dial(raw_dict, script, lang=None):
+        return Dialogue(script, raw_dict['character'], raw_dict['line'], raw_dict['text'], lang=lang)
 
 
 class Va11ReaderException(Exception):
@@ -97,9 +100,10 @@ class ScriptLineDoesNotExists(Va11ReaderException):
 
 
 class Va11HallaJSON:
-    def __init__(self, paths):
+    def __init__(self, paths, lang=None):
         """paths = (dialogue_scripts.json, dialogue_grouped.json, names.json)"""
         self.paths = paths
+        self.lang = lang
         # dialogue_scripts.json
         self._dialogue_scripts = None
         self._scripts = None
@@ -198,7 +202,7 @@ class Va11HallaJSON:
             line = script[line_num-1]
             if line['type'] == 'META':
                 raise ScriptLineDoesNotExists(Script(line), line_num)
-            return Dialogue.from_scripts_dial(line, script[0])
+            return Dialogue.from_scripts_dial(line, script[0], lang=self.lang)
         except IndexError:
             raise ScriptLineDoesNotExists(Script(script[0]), line_num)
 
@@ -215,7 +219,7 @@ class Va11HallaJSON:
             dialogue = random.choice(character_lines)
         else:
             dialogue = random.choice(script[1:])
-        return Dialogue.from_scripts_dial(dialogue, script_info)
+        return Dialogue.from_scripts_dial(dialogue, script_info, lang=self.lang)
 
     def random_from_characters(self, character=None) -> Dialogue:
         if character is None:
@@ -225,7 +229,7 @@ class Va11HallaJSON:
         except KeyError:
             raise CharacterNotFound(character)
         dialogue = random.choice(dialogues)
-        return Dialogue.from_grouped_dial(dialogue, character)
+        return Dialogue.from_grouped_dial(dialogue, character, lang=self.lang)
 
 
 class Va11DataManager:
@@ -282,5 +286,5 @@ class Va11DataManager:
         for lang in self.langs.keys():
             readers[lang] = Va11HallaJSON((os.path.join(self.path, lang, "dialogue_scripts.json"),
                                            os.path.join(self.path, lang, "dialogue_grouped.json"),
-                                           os.path.join(self.path, lang, "names.json")))
+                                           os.path.join(self.path, lang, "names.json")), lang)
         return readers

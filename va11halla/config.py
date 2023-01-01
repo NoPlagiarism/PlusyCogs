@@ -1,5 +1,6 @@
 import os
 
+
 class Settings:
     VALIDATE_DOWNLOAD = True
     SUBFOLDER_WITH_DATA = "data"
@@ -13,8 +14,13 @@ class Settings:
     CHARACTERS_PER_PAGE = 10
     SCRIPTS_PER_PAGE = 15
 
-    USE_VIEW = True
-    VIEW_TIMEOUT = 60
+    USE_REACTIONS = True
+    REACTIONS_TIMEOUT = 120
+
+    class ReactionsEmojis:
+        PREV = "⏪"
+        RANDOM = "⏺"
+        NEXT = "⏩"
 
     DISABLE_DOGS_LIST = False
     CHARACTERS_PER_PAGE_FILTERED = 9

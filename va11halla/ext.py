@@ -2,11 +2,16 @@ import discord
 from .config import Settings
 from redbot.core import commands, data_manager, Config
 from redbot.core.utils import AsyncIter
+from redbot.vendored.discord.ext import menus
 from .reader import Va11HallaJSON, Va11DataManager, Va11ReaderException
 import json
 from math import ceil
 import random
 from typing import Optional
+
+
+with open(Settings.ICONS_PATH, encoding="utf-8", mode="r") as f:
+    ICONS = json.load(f)["char_icons"]
 
 
 def progress_bar(value, max_value, size=10):
@@ -22,9 +27,10 @@ def progress_bar(value, max_value, size=10):
 
 
 class DialEmbed(discord.Embed):
-    def __init__(self, dial=None, character_uri=None):
+    def __init__(self, dial=None, character_uri=None, data=None):
         super(DialEmbed, self).__init__(colour=Settings.EMBED_COLOR)
         self.dial, self.character_uri = dial, character_uri
+        self.data = data
         if dial is not None and character_uri is not None:
             self.update_embed(dial, character_uri)
 
@@ -44,25 +50,75 @@ class DialEmbed(discord.Embed):
     def line(self) -> int:
         return self.dial.line
 
+    @property
+    def lang(self) -> str:
+        return self.dial.lang
+
+    def is_next_line_available(self):
+        return self.dial.line != self.dial.script.lines
+
+    def is_prev_line_available(self):
+        return self.dial.line != 1
+
+    def random(self):
+        dial = self.data.random_from_scripts()
+        self.update_embed(dial, ICONS[self.data.names[dial.character]])
+
+    def go_to_prev(self, next_=False):
+        if not next_:
+            line = self.line - 1
+        else:
+            line = self.line + 1
+        dial = self.data.get_script_line(line, meta=self.dial.script)
+        self.update_embed(dial, ICONS[self.data.names[dial.character]])
+
+
+class Va11HallaMenu(menus.Menu):
+    async def send_initial_message(self, ctx, channel):
+        return await ctx.send(embed=self.va11_embed)
+
+    def __init__(self, embed: DialEmbed):
+        self.va11_embed = embed
+
+        super(Va11HallaMenu, self).__init__(timeout=Settings.REACTIONS_TIMEOUT,
+                                            clear_reactions_after=True)
+        self.add_all_buttons()
+
+    def add_all_buttons(self):
+        for emoji in (Settings.ReactionsEmojis.PREV, Settings.ReactionsEmojis.RANDOM, Settings.ReactionsEmojis.NEXT):
+            self.add_button(menus.Button(emoji, self.handle_buttons))
+
+    async def handle_buttons(self, payload: discord.RawReactionActionEvent):
+        if str(payload.emoji) == Settings.ReactionsEmojis.RANDOM:
+            self.va11_embed.random()
+        elif str(payload.emoji) == Settings.ReactionsEmojis.PREV and self.va11_embed.is_prev_line_available():
+            self.va11_embed.go_to_prev()
+        elif str(payload.emoji) == Settings.ReactionsEmojis.NEXT and self.va11_embed.is_next_line_available():
+            self.va11_embed.go_to_prev(True)
+        else:
+            return
+        return await self.message.edit(embed=self.va11_embed)
+
 
 class Va11Halla(commands.Cog):
     def __init__(self, bot, validate_download=True):
         self.bot = bot
+        super(Va11Halla, self).__init__()
         path = data_manager.cog_data_path(cog_instance=self)
         self._manager = Va11DataManager(path)
         if validate_download:
             self._manager.validate_and_download()
             self.readers = self._manager.get_all_readers()
-        with open(Settings.ICONS_PATH, encoding="utf-8", mode="r") as f:
-            self.icons = json.load(f)["char_icons"]
 
         self.config = Config.get_conf(self, identifier=198403112199)  # FCKPTN
         default_guild = {
             "default_lang": Settings.DEF_LANG,
-            "whitelist": None  # if None => ALL
+            "whitelist": None,  # if None => ALL
+            "reactions": True
         }
         default_member = {
-            "default_lang": Settings.DEF_LANG
+            "default_lang": Settings.DEF_LANG,
+            "reactions": True
         }
         self.config.register_guild(**default_guild)
         self.config.register_member(**default_member)
@@ -83,7 +139,7 @@ class Va11Halla(commands.Cog):
                 await self.config.member_from_ids(guild_id, user_id).clear()
 
     def get_random_icon(self):
-        return random.choice(tuple(self.icons.values()))
+        return random.choice(tuple(ICONS.values()))
 
     def _list_characters(self, page=None, lang=None):  # TODO: Support dogs filter
         if lang is None:
@@ -129,6 +185,22 @@ class Va11Halla(commands.Cog):
     async def get_reader_from_ctx(self, ctx):
         return self.readers[await self.get_lang_from_ctx(ctx)]
 
+    async def should_use_reactions(self, ctx):
+        # Settings, channel permissions, guild config, member config
+        if not Settings.USE_REACTIONS:
+            return False
+        permissions = ctx.channel.permissions_for(ctx.guild.me)
+        if not permissions.add_reactions:
+            return False
+        if ctx.channel.guild is not None:
+            guild_conf = await self.config.guild(ctx.channel.guild).reactions()
+            if guild_conf:
+                return True
+        member_conf = await self.config.member(ctx.author).reactions()
+        if member_conf:
+            return True
+        return False
+
     @commands.command(aliases=("va11", "valhalla"))
     async def va11halla(self, ctx, *args):
         data = await self.get_reader_from_ctx(ctx)
@@ -168,8 +240,12 @@ class Va11Halla(commands.Cog):
         else:
             dial = data.random_from_scripts()
 
-        embed = DialEmbed(dial, self.icons[data.names[dial.character]])
-        return await ctx.send(embed=embed)
+        embed = DialEmbed(dial, ICONS[data.names[dial.character]], data=data)
+        if await self.should_use_reactions(ctx):
+            menu = Va11HallaMenu(embed)
+            return await menu.start(ctx)
+        else:
+            return await ctx.send(embed=embed)
 
     @commands.command(name="va11-list", aliases=("va11halla-list", "valhalla-list", "va11list", "va11hallalist"))
     async def va11halla_list(self, ctx, list_type: Optional[str] = None, page: Optional[int] = None):
@@ -210,6 +286,13 @@ class Va11Halla(commands.Cog):
         await self.config.member(ctx.author).default_lang.set(lang)
         return await ctx.reply("Default language changed")
 
+    @conf_local.command(name="reactions")
+    async def toggle_member_reactions(self, ctx):
+        old_value = await self.config.member(ctx.author).reactions()
+        new_value = not old_value
+        await self.config.member(ctx.author).reactions.set(new_value)
+        return await ctx.reply(" ".join("Reactions are" + {True: "Enabled", False: "Disabled"}[new_value] + "now"))
+
     @va11halla_conf.group(name="guild")
     @commands.admin()
     @commands.guild_only()
@@ -243,14 +326,23 @@ class Va11Halla(commands.Cog):
             await self.config.guild(ctx.guild).whitelist.set(old_whitelist)
             return await ctx.reply("Language removed from whitelist")
 
+    @conf_guild.command(name="reactions")
+    async def toggle_guild_reactions(self, ctx):
+        old_value = await self.config.guild(ctx.guild).reactions()
+        new_value = not old_value
+        await self.config.guild(ctx.guild).reactions.set(new_value)
+        return await ctx.reply(" ".join("Reactions are" + {True: "Enabled", False: "Disabled"}[new_value] + "now"))
+
     @conf_guild.command(name="show")
     async def guild_show(self, ctx):
         whitelist = ", ".join(await self.config.guild(ctx.guild).whitelist()) if await self.config.guild(ctx.guild).whitelist() is not None else "Disabled"
         guild_default = await self.config.guild(ctx.guild).default_lang()
+        reactions = "Enabled" if await self.config.guild(ctx.guild).reactions() else "Disabled"
 
         return await ctx.send(
             "VA-11 HALL-A's Guild Settings\n"
             f"Whitelist: {whitelist}\n"
-            f"Guild Default Language: {guild_default}"
+            f"Guild Default Language: {guild_default}\n"
+            f"Reactions are {reactions}"
         )
 
