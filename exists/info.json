@@ -8,5 +8,5 @@
     "type": "COG",
     "min_python_version": [3, 9, 0],
     "min_bot_version": "3.4.0",
-    "end_user_data_statement": "This cog does not persistently store any data or metadata about users."
+    "end_user_data_statement": "Cog does not collect any info about users, but collects guild's blacklist and NSFW preference."
 }
