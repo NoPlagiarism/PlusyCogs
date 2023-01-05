@@ -102,7 +102,7 @@ class Va11HallaMenu(menus.Menu):
 
 
 class Va11Halla(commands.Cog):
-    """Cog with quotes from 'VA-11 HALL-A: Cyberpunk Bartender Action'
+    """'Va11Halla' Cog with quotes from 'VA-11 HALL-A: Cyberpunk Bartender Action'
     Dialogue data from https://github.com/NoPlagiarism/va11halla-dialogues
     All dialogue lines parsed from .txt scripts"""
     def __init__(self, bot, validate_download=True):

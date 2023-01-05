@@ -24,7 +24,7 @@ async def command_check_blacklist(ctx):
 
 
 class Exists(commands.Cog):
-    """This x does not Exists cog"""
+    """This x does not 'Exists' cog"""
     def __init__(self, bot: commands.Bot):
         self.bot = bot
         self.config = Config.get_conf(self, identifier=141012082000)  # Она утонула.
