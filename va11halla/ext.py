@@ -15,7 +15,7 @@ with open(Settings.ICONS_PATH, encoding="utf-8", mode="r") as f:
 
 
 def progress_bar(value, max_value, size=10):
-    """Просто прогресс бар"""
+    """Just txt progress bar"""
     progress_string = '▇'
     empty_string = '—'
 
@@ -27,6 +27,7 @@ def progress_bar(value, max_value, size=10):
 
 
 class DialEmbed(discord.Embed):
+    """Embed with dialogue line"""
     def __init__(self, dial=None, character_uri=None, data=None):
         super(DialEmbed, self).__init__(colour=Settings.EMBED_COLOR)
         self.dial, self.character_uri = dial, character_uri
@@ -101,6 +102,9 @@ class Va11HallaMenu(menus.Menu):
 
 
 class Va11Halla(commands.Cog):
+    """Cog with quotes from 'VA-11 HALL-A: Cyberpunk Bartender Action'
+    Dialogue data from https://github.com/NoPlagiarism/va11halla-dialogues
+    All dialogue lines parsed from .txt scripts"""
     def __init__(self, bot, validate_download=True):
         self.bot = bot
         super(Va11Halla, self).__init__()
@@ -143,7 +147,8 @@ class Va11Halla(commands.Cog):
             if user_id in guild_data:
                 await self.config.member_from_ids(guild_id, user_id).clear()
 
-    def get_random_icon(self):
+    @staticmethod
+    def get_random_icon():
         return random.choice(tuple(ICONS.values()))
 
     def _list_characters(self, page=None, lang=None):  # TODO: Support dogs filter
@@ -172,6 +177,7 @@ class Va11Halla(commands.Cog):
         return tuple(self.readers.keys()), self.get_random_icon(), 1  # TODO: Add only available languages in guild
 
     async def get_lang_from_ctx(self, ctx):
+        """Get default language for channel (DM or guild)"""
         if ctx.guild is None:
             user_def = await self.config.user(ctx.author).default_lang()
             return user_def
@@ -196,7 +202,6 @@ class Va11Halla(commands.Cog):
         return self.readers[await self.get_lang_from_ctx(ctx)]
 
     async def should_use_reactions(self, ctx):
-        # Settings, channel permissions, guild config, member config
         if not Settings.USE_REACTIONS:
             return False
         if ctx.guild is None:
@@ -216,6 +221,13 @@ class Va11Halla(commands.Cog):
 
     @commands.command(aliases=("va11", "valhalla"))
     async def va11halla(self, ctx, *args):
+        """Dialogue line from VA-11 HALL-A
+        Examples:
+            [p]va11 - random line
+            [p]va11 ru - random line on Russian
+            [p]va11 script6.txt - random line from day 6
+            [p]va11 script6.txt 516 - 516 line on day 6
+            [p]va11 Sei - random line from Sei"""
         data = await self.get_reader_from_ctx(ctx)
         lang = None
         script = None
@@ -286,6 +298,7 @@ class Va11Halla(commands.Cog):
 
     @commands.group(name="va11-config", aliases=("valhalla-config", "va11config", "va11hallaconfig", "va11halla-config"))
     async def va11halla_conf(self, ctx):
+        """Change default language or toggle reactions menu"""
         pass
 
     @va11halla_conf.group(name="me")
