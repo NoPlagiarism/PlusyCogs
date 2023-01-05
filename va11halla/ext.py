@@ -120,8 +120,13 @@ class Va11Halla(commands.Cog):
             "default_lang": Settings.DEF_LANG,
             "reactions": True
         }
+        default_user = {  # For DM
+            "default_lang": Settings.DEF_LANG,
+            "reactions": True
+        }
         self.config.register_guild(**default_guild)
         self.config.register_member(**default_member)
+        self.config.register_user(**default_user)
 
     async def cog_command_error(self, ctx: commands.Context, error: commands.CommandError):
         original = getattr(error, "original", None)
@@ -167,6 +172,9 @@ class Va11Halla(commands.Cog):
         return tuple(self.readers.keys()), self.get_random_icon(), 1  # TODO: Add only available languages in guild
 
     async def get_lang_from_ctx(self, ctx):
+        if ctx.guild is None:
+            user_def = await self.config.user(ctx.author).default_lang()
+            return user_def
         whitelist_guild = await self.config.guild(ctx.guild).whitelist()
         member_def = await self.config.member(ctx.author).default_lang()
         if whitelist_guild is None:
@@ -177,6 +185,8 @@ class Va11Halla(commands.Cog):
             return await self.config.guild(ctx.guild).default_lang()
 
     async def get_available_langs_from_ctx(self, ctx):
+        if ctx.guild is None:
+            return self.readers.keys()
         if (whitelist := await self.config.guild(ctx.guild).whitelist()) is not None:
             return whitelist
         else:
@@ -189,6 +199,9 @@ class Va11Halla(commands.Cog):
         # Settings, channel permissions, guild config, member config
         if not Settings.USE_REACTIONS:
             return False
+        if ctx.guild is None:
+            user_conf = await self.config.user(ctx.author).reactions()
+            return user_conf
         permissions = ctx.channel.permissions_for(ctx.guild.me)
         if not permissions.add_reactions:
             return False
@@ -283,14 +296,22 @@ class Va11Halla(commands.Cog):
     async def local_lang(self, ctx, lang: str):
         if lang not in (langs := await self.get_available_langs_from_ctx(ctx)):
             return await ctx.reply("Choose from those: " + ", ".join(langs))
-        await self.config.member(ctx.author).default_lang.set(lang)
+        if ctx.guild is not None:
+            await self.config.member(ctx.author).default_lang.set(lang)
+        else:
+            await self.config.user(ctx.author).default_lang.set(lang)
         return await ctx.reply("Default language changed")
 
     @conf_local.command(name="reactions")
     async def toggle_member_reactions(self, ctx):
-        old_value = await self.config.member(ctx.author).reactions()
-        new_value = not old_value
-        await self.config.member(ctx.author).reactions.set(new_value)
+        if ctx.guild is not None:
+            old_value = await self.config.member(ctx.author).reactions()
+            new_value = not old_value
+            await self.config.member(ctx.author).reactions.set(new_value)
+        else:
+            old_value = await self.config.user(ctx.author).reactions()
+            new_value = not old_value
+            await self.config.user(ctx.author).reactions.set(new_value)
         return await ctx.reply(" ".join("Reactions are" + {True: "Enabled", False: "Disabled"}[new_value] + "now"))
 
     @va11halla_conf.group(name="guild")
