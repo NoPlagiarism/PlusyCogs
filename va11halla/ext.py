@@ -108,7 +108,7 @@ class Va11Halla(commands.Cog):
         self._manager = Va11DataManager(path)
         if validate_download:
             self._manager.validate_and_download()
-            self.readers = self._manager.get_all_readers()
+        self.readers = self._manager.get_all_readers()
 
         self.config = Config.get_conf(self, identifier=198403112199)  # FCKPTN
         default_guild = {
