@@ -12,5 +12,7 @@
 3. Enjoy **:>**
 
 
-## Exists
-A cog with compilation of thisxdoesnotexists
+## exists
+Cog with compilation of thisxdoesnotexists
+## va11halla
+Cog with random quotes from [VA-11 HALL-A: CYBERPUNK BARTENDER ACTION](http://store.steampowered.com/app/447530/) by [Sukeban Games](https://sukeban.moe/) 
