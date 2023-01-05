@@ -136,7 +136,7 @@ class Va11Halla(commands.Cog):
         original = getattr(error, "original", None)
         if original:
             if isinstance(original, Va11ReaderException):
-                return ctx.reply(str(original))
+                return await ctx.reply(str(original))
         return await ctx.bot.on_command_error(ctx, error, unhandled_by_cog=True)
 
     async def red_delete_data_for_user(self, *, requester, user_id):
