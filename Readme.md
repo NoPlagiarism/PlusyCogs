@@ -1,18 +1,24 @@
 # [Redbot v3](https://github.com/Cog-Creators/Red-DiscordBot) cogs 
 
 
-1. Install guide:
+## Install guide
 
-    `[p]repo add PlusyCogs https://github.com/NoPlagiarism/PlusyCogs`
+1. Add repository:
+
+    `[p]repo add plusycogs https://github.com/NoPlagiarism/PlusyCogs`
 
 2.  then:
 
-    `[p]cog install PlusyCogs AnyCogInRepo`
+    `[p]cog install plusycogs AnyCogInRepo`
 
 3. Enjoy **:>**
 
 
 ## exists
-Cog with compilation of thisxdoesnotexists
+Cog with compilation of generators like thisxdoesnotexists
+
+`[p]cog install plusycogs exists`
 ## va11halla
-Cog with random quotes from [VA-11 HALL-A: CYBERPUNK BARTENDER ACTION](http://store.steampowered.com/app/447530/) by [Sukeban Games](https://sukeban.moe/) 
+Cog with random quotes from [VA-11 HALL-A: CYBERPUNK BARTENDER ACTION](http://store.steampowered.com/app/447530/) by [Sukeban Games](https://sukeban.moe/)
+
+`[p]cog install plusycogs va11halla`
