@@ -76,7 +76,7 @@ class CharacterNotFound(Va11ReaderException):
         self.name = name
         self.script = None if script is None else script
 
-    def __repr__(self):
+    def __str__(self):
         if self.script:
             return f"Character {self.name} in script {self.script} not found"
         return f"Character {self.name} not found"
@@ -86,7 +86,7 @@ class ScriptNotFound(Va11ReaderException):
     def __init__(self, filename):
         self.filename = filename
 
-    def __repr__(self):
+    def __str__(self):
         return f"Character {self.filename} not found"
 
 
@@ -95,7 +95,7 @@ class ScriptLineDoesNotExists(Va11ReaderException):
         self.script = script_info
         self.error_line = error_line
 
-    def __repr__(self):
+    def __str__(self):
         return f"{self.script['filename']} has {self.script['lines']} lines"
 
 
