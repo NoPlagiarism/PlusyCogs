@@ -350,7 +350,7 @@ class Va11Halla(commands.Cog):
             old_value = await self.config.user(ctx.author).reactions()
             new_value = not old_value
             await self.config.user(ctx.author).reactions.set(new_value)
-        return await ctx.reply(" ".join("Reactions are" + {True: "Enabled", False: "Disabled"}[new_value] + "now"))
+        return await ctx.reply(" ".join(("Reactions are", {True: "Enabled", False: "Disabled"}[new_value], "now")))
 
     @va11halla_conf.group(name="guild")
     @commands.admin()
@@ -390,7 +390,7 @@ class Va11Halla(commands.Cog):
         old_value = await self.config.guild(ctx.guild).reactions()
         new_value = not old_value
         await self.config.guild(ctx.guild).reactions.set(new_value)
-        return await ctx.reply(" ".join("Reactions are" + {True: "Enabled", False: "Disabled"}[new_value] + "now"))
+        return await ctx.reply(" ".join(("Reactions are", {True: "Enabled", False: "Disabled"}[new_value], "now")))
 
     @conf_guild.command(name="show")
     async def guild_show(self, ctx):
