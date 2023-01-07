@@ -22,7 +22,8 @@ class Settings:
         RANDOM = "⏺"
         NEXT = "⏩"
 
-    DISABLE_DOGS_LIST = False
+
+    DISABLE_DOGS_LIST = True
     CHARACTERS_PER_PAGE_FILTERED = 9
     CAMEO_DOGS = ["Lord Pumplerump", "Arial Wienerton", "Lady Banner", "Dragon Fucker", "Satan's Hellper",
                   "Pesky Furball", "Wyrm Frigger", "Bangkok Bastard", "Tortilla Pope", "Cou Rage", "Dog 5",

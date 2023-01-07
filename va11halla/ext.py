@@ -1,3 +1,4 @@
+import asyncio
 import discord
 from .config import Settings
 from redbot.core import commands, data_manager, Config
@@ -105,11 +106,14 @@ class Va11Halla(commands.Cog):
     """'Va11Halla' Cog with quotes from 'VA-11 HALL-A: Cyberpunk Bartender Action'
     Dialogue data from https://github.com/NoPlagiarism/va11halla-dialogues
     All dialogue lines parsed from .txt scripts"""
-    def __init__(self, bot, validate_download=True):
+    def __init__(self, bot, validate_download=True, manager: Va11DataManager = None):
         self.bot = bot
         super(Va11Halla, self).__init__()
         path = data_manager.cog_data_path(cog_instance=self)
-        self._manager = Va11DataManager(path)
+        if manager is None:
+            self._manager = Va11DataManager(path)
+        else:
+            self._manager = manager
         if validate_download:
             self._manager.validate_and_download()
         self.readers = self._manager.get_all_readers()
@@ -151,19 +155,28 @@ class Va11Halla(commands.Cog):
     def get_random_icon():
         return random.choice(tuple(ICONS.values()))
 
-    def _list_characters(self, page=None, lang=None):  # TODO: Support dogs filter
-        if lang is None:
+    async def _list_characters(self, page=None, lang=None, ctx=None):
+        if lang is None and ctx is not None:
+            lang = await self.get_lang_from_ctx(ctx)
+        elif lang is not None:
+            lang = lang
+        elif lang is None and ctx is None:
             lang = Settings.DEF_LANG
         data = self.readers[lang]
-        per_page = Settings.CHARACTERS_PER_PAGE
-        pages_len = ceil(len(data.characters) / per_page)
+        if Settings.DISABLE_DOGS_LIST:
+            per_page = Settings.CHARACTERS_PER_PAGE_FILTERED
+            characters = data.characters_filtered
+        else:
+            per_page = Settings.CHARACTERS_PER_PAGE
+            characters = data.characters
+        pages_len = ceil(len(characters) / per_page)
         if page is None or not (0 <= page <= pages_len - 1):
             page = 0
-        characters_slice = data.characters[per_page * page:per_page * (page + 1)]
+        characters_slice = characters[per_page * page:per_page * (page + 1)]
         icon = self.get_random_icon()
         return characters_slice, icon, pages_len
 
-    def _list_scripts(self, page=None):
+    def _list_scripts(self, page=None, **kwargs):
         scripts = self.readers[Settings.DEF_LANG].scripts
         pages_len = ceil(len(scripts) / Settings.SCRIPTS_PER_PAGE)
         if page is None or not (0 <= page <= pages_len - 1):
@@ -173,8 +186,17 @@ class Va11Halla(commands.Cog):
         icon = self.get_random_icon()
         return scripts_slice, icon, pages_len
 
-    def _list_langs(self, *args):
-        return tuple(self.readers.keys()), self.get_random_icon(), 1  # TODO: Add only available languages in guild
+    async def _list_langs(self, ctx=None, **kwargs):
+        if ctx is None:
+            langs = self.readers.keys()
+        else:
+            if ctx.guild is None:
+                langs = self.readers.keys()
+            else:
+                langs = await self.config.guild(ctx.guild).whitelist()
+                if langs is None:
+                    langs = self.readers.keys()
+        return tuple(langs), self.get_random_icon(), 1
 
     async def get_lang_from_ctx(self, ctx):
         """Get default language for channel (DM or guild)"""
@@ -288,7 +310,10 @@ class Va11Halla(commands.Cog):
             return await ctx.reply("Use as argument: scripts, characters, langs")
         if list_type == "langs":
             list_type = "languages"
-        list_slice, icon, total_pages = func(page)
+        if asyncio.iscoroutinefunction(func):
+            list_slice, icon, total_pages = await func(page=page, ctx=ctx)
+        else:
+            list_slice, icon, total_pages = func(page=page, ctx=ctx)
         if page > total_pages:
             page = 0
         embed = discord.Embed(colour=Settings.EMBED_COLOR, title="list of " + list_type)

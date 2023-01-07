@@ -114,11 +114,8 @@ class Va11HallaJSON:
         self.init_names()
         self._names_filtered = None
         self.init_names_filtered()
-        self.characters = None
-        if Settings.DISABLE_DOGS_LIST:  # TODO: Поправить. Выглядит странно и костыльно
-            self.characters = tuple(self.names_filtered.keys())
-        else:
-            self.characters = tuple(self.names.keys())
+        self.characters = tuple(self.names.keys())
+        self.characters_filtered = tuple(self.names_filtered.keys())
 
     def init_names(self, path=None):
         if self.names is not None:
@@ -130,8 +127,11 @@ class Va11HallaJSON:
 
     def init_names_filtered(self, exclude=None):
         if exclude is None:
-            exclude = Settings.CAMEO_DOGS  # TODO: Support to remove other language dogs
-        self._names_filtered = dict(filter(lambda x: x[1] not in exclude, self.names.items()))
+            exclude = Settings.CAMEO_DOGS
+            if self.lang != "en":
+                exclude = [self.names_reversed[char] for char in exclude]
+                print(exclude)
+        self._names_filtered = dict(tuple(filter(lambda x: x[0] not in exclude, self.names.items())))
 
     def init_scripts(self, path=None):
         if self._dialogue_scripts is not None:
@@ -176,6 +176,10 @@ class Va11HallaJSON:
         if self._scripts is None:
             self.init_scripts_list()
         return self._scripts
+
+    @property
+    def names_reversed(self):
+        return {v: k for k, v in self.names.items()}
 
     @property
     def names_filtered(self):
@@ -260,7 +264,7 @@ class Va11DataManager:
             for lang, name_urls in self.langs.items():
                 for name, url in name_urls.items():
                     async with session.get(url) as resp:
-                        json_ = await resp.json(encoding="utf-8")
+                        json_ = await resp.json(encoding="utf-8", content_type='text/plain')
                     with open(os.path.join(self.path, lang, name), mode='w+', encoding="utf-8") as f:
                         json.dump(json_, f)
 
@@ -269,7 +273,7 @@ class Va11DataManager:
             if not os.path.exists(os.path.join(self.path, lang)):
                 os.makedirs(os.path.join(self.path, lang))
 
-    def download(self):  # TODO: async
+    def download(self):
         self.makedirs()
         for lang, name_urls in self.langs.items():
             for name, url in name_urls.items():
@@ -280,6 +284,10 @@ class Va11DataManager:
     def validate_and_download(self):
         if not self.validate():
             self.download()
+
+    async def async_validate_and_download(self):
+        if not self.validate():
+            await self.async_download()
 
     def get_all_readers(self):
         readers = dict()
