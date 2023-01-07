@@ -14,11 +14,11 @@
 3. Enjoy **:>**
 
 
-## exists
+## [exists](exists/Readme.md)
 Cog with compilation of generators like thisxdoesnotexists
 
 `[p]cog install plusycogs exists`
-## va11halla
-Cog with random quotes from [VA-11 HALL-A: CYBERPUNK BARTENDER ACTION](http://store.steampowered.com/app/447530/) by [Sukeban Games](https://sukeban.moe/)
+## [va11halla](va11halla/Readme.md)
+Cog with random quotes from [VA-11 HALL-A: CYBERPUNK BARTENDER ACTION](https://store.steampowered.com/app/447530/) by [Sukeban Games](https://sukeban.moe/)
 
 `[p]cog install plusycogs va11halla`
