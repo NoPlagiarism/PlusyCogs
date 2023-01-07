@@ -130,7 +130,6 @@ class Va11HallaJSON:
             exclude = Settings.CAMEO_DOGS
             if self.lang != "en":
                 exclude = [self.names_reversed[char] for char in exclude]
-                print(exclude)
         self._names_filtered = dict(tuple(filter(lambda x: x[0] not in exclude, self.names.items())))
 
     def init_scripts(self, path=None):

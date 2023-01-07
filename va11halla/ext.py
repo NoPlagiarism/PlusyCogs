@@ -232,13 +232,13 @@ class Va11Halla(commands.Cog):
         permissions = ctx.channel.permissions_for(ctx.guild.me)
         if not permissions.add_reactions:
             return False
+        member_conf = await self.config.member(ctx.author).reactions()
+        if not member_conf:
+            return False
         if ctx.channel.guild is not None:
             guild_conf = await self.config.guild(ctx.channel.guild).reactions()
             if guild_conf:
                 return True
-        member_conf = await self.config.member(ctx.author).reactions()
-        if member_conf:
-            return True
         return False
 
     @commands.command(aliases=("va11", "valhalla"))
