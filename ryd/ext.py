@@ -5,12 +5,11 @@ import aiohttp
 from collections import namedtuple
 from typing import Optional
 import discord
-from enum import Enum
 
 votes_tuple = namedtuple("Votes", ['video_id', 'likes', 'dislikes'])
 
 
-class ChannelScan(Enum):
+class ChannelScan:
     DISABLED = 0
     ENABLED = 1
     WHITELISTED = 2
@@ -110,8 +109,14 @@ class RYDCog(commands.Cog):
             return True
         if not await self.config.guild(guild).enabled_scan():
             return True
-        if not await self.config.channel(message.channel).enabled_scan():
-            return True
+        whitelist_mode = await self.config.guild(guild).whitelist_mode()
+        channel_scan = await self.config.channel(message.channel).enabled_scan()
+        if whitelist_mode:
+            if channel_scan != ChannelScan.WHITELISTED:
+                return True
+        else:
+            if channel_scan == ChannelScan.DISABLED:
+                return True
         if not await self.config.member(message.author).enabled_scan():
             return True
         return False
@@ -177,12 +182,36 @@ class RYDCog(commands.Cog):
         await self.config.guild(ctx.guild).enabled_scan.set(new_value)
         return await ctx.reply(" ".join(("Message scanning is", {True: "Enabled", False: "Disabled"}[new_value], "now")))
 
+    @config_guild.command(name="whitelist")
+    async def guild_whitelist_mode_toggle(self, ctx):
+        """Enable/Disable whitelist mode for guild"""
+        old_value = await self.config.guild(ctx.guild).whitelist_mode()
+        new_value = not old_value
+        await self.config.guild(ctx.guild).whitelist_mode.set(new_value)
+        return await ctx.reply(" ".join(("Whitelist mode is", {True: "Enabled", False: "Disabled"}[new_value], "now")))
+
     @config_guild.command(name="channel")
     async def channel_disable_toggle(self, ctx, channel: discord.TextChannel = None):
-        """Disable/Enable message scanning for channel"""
+        """Disable/Enable message scanning for channel. Even in whitelist mode"""
         if channel is None:
             channel = ctx.channel
+        whitelist_mode = await self.config.guild(ctx.guild).whitelist_mode()
+        enabled_value = ChannelScan.WHITELISTED if whitelist_mode else ChannelScan.ENABLED
+        disabled_value = ChannelScan.ENABLED if whitelist_mode else ChannelScan.DISABLED
         old_value = await self.config.channel(channel).enabled_scan()
-        new_value = not old_value
+        if old_value in (ChannelScan.ENABLED, ChannelScan.WHITELISTED) and not whitelist_mode:
+            new_value = ChannelScan.DISABLED
+            str_new = "Disabled"
+        elif old_value == ChannelScan.WHITELISTED and whitelist_mode:
+            new_value = ChannelScan.ENABLED
+            str_new = "not Whitelisted"
+        elif old_value == ChannelScan.DISABLED and not whitelist_mode:
+            new_value = ChannelScan.ENABLED
+            str_new = "Enabled"
+        elif old_value in (ChannelScan.DISABLED, ChannelScan.ENABLED) and whitelist_mode:
+            new_value = ChannelScan.WHITELISTED
+            str_new = "Whitelisted"
+        else:
+            return
         await self.config.channel(channel).enabled_scan.set(new_value)
-        return await ctx.reply(" ".join(("Message scanning is", {True: "Enabled", False: "Disabled"}[new_value], "now")))
+        return await ctx.reply(" ".join(("Message scanning is", str_new, "now")))
