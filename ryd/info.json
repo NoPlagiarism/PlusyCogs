@@ -1,0 +1,12 @@
+{
+    "name": "ryd",
+    "author": ["Albrt#3043"],
+    "description": "RYD cog scans every message for youtube links and replies with likes/dislikes count",
+    "short": "Return Youtube Dislike",
+    "install_msg": "Enjoy RYD access from Discord",
+    "tags": ["ryd", "youtube", "returnyoutubedislike"],
+    "type": "COG",
+    "min_bot_version": "3.4.0",
+    "min_python_version": [3, 9, 0],
+    "hidden": true
+}
