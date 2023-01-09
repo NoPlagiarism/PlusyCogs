@@ -99,6 +99,14 @@ class RYDCog(commands.Cog):
         return await ctx.reply(msg)
 
     async def should_ignore(self, message: discord.Message, *, edit: bool = False) -> bool:
+        """What messages should be ignored?
+        - If it's not new message, and just edit
+        - If scan disabled globally
+        - If DM
+        - If cog disabled in guild
+        - If scan disabled in guild
+        - If scan disabled in channel, or whitelist mode is on and it's not whitelisted
+        - If member disabled scan for himself"""
         if edit:
             return True
         if not await self.config.enabled_scan():
@@ -197,8 +205,6 @@ class RYDCog(commands.Cog):
         if channel is None:
             channel = ctx.channel
         whitelist_mode = await self.config.guild(ctx.guild).whitelist_mode()
-        enabled_value = ChannelScan.WHITELISTED if whitelist_mode else ChannelScan.ENABLED
-        disabled_value = ChannelScan.ENABLED if whitelist_mode else ChannelScan.DISABLED
         old_value = await self.config.channel(channel).enabled_scan()
         if old_value in (ChannelScan.ENABLED, ChannelScan.WHITELISTED) and not whitelist_mode:
             new_value = ChannelScan.DISABLED
