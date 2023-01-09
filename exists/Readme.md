@@ -1,9 +1,14 @@
 # exists
 > Cog with generators a-like This Does Not Exist.
 
+- [Install](#install)
 - [Generators](#list-of-generators)
 - [Generators blacklist](#exclude-generators-in-guild-server)
 - [Ultra-Disable NSFW](#disable-nsfw-in-nsfw-channels)
+
+### Install
+- `[p]repo add plusycogs https://github.com/NoPlagiarism/PlusyCogs`
+- `[p]cog install plusycogs exists`
 
 
 ### Example

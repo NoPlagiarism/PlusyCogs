@@ -1,9 +1,14 @@
 # ryd
 > Scan your message for yt links and fetch dislikes from [Return YouTube Dislike](https://returnyoutubedislike.com/)
 
+- [Install](#install)
 - [How-to](#how-to-use)
 - [Scanner toggle](#how-to-disable-scanner)
 - [Whitelist mode](#whitelist-mode)
+
+### Install
+- `[p]repo add plusycogs https://github.com/NoPlagiarism/PlusyCogs`
+- `[p]cog install plusycogs ryd`
 
 ### How to use
 Just send any yt link, or use `ryd` command like `[p]ryd youtu.be/kxOuG8jMIgI`

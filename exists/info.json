@@ -2,7 +2,7 @@
     "name": "Exists",
     "author": ["Albrt#3043"],
     "description": "Compilation of generators a-like \"This {sth} does not exists\". ",
-    "install_msg": "Tnx for installing the cog. U can always find me on RedBot Discord Server, if you need help\nNSFW generators are disaled in guild by default\nCog does not collect any info about users, but collects server's preferences",
+    "install_msg": "Tnx for installing the cog. U can always find me on RedBot Discord Server, if you need help\nNSFW generators are disaled in guild by default\nDocs available: <https://github.com/NoPlagiarism/PlusyCogs/blob/master/exists/Readme.md>",
     "short": "This x does not exists",
     "tags": ["generator", "thisdoesnotexists"],
     "type": "COG",

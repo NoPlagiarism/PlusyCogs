@@ -1,10 +1,15 @@
 # va11halla
 > Random quotes from VN "[VA-11 HALL-A: Cyberpunk Bartender Action](https://store.steampowered.com/app/447530/)" by [Sukeban Games](https://sukeban.moe/)
 
+- [Install](#install)
 - [Examples](#examples)
 - [Main command parameters](#parameters)
 - [Default language](#default-language)
 - [va11-list command](#lists-of)
+
+### Install
+- `[p]repo add plusycogs https://github.com/NoPlagiarism/PlusyCogs`
+- `[p]cog install plusycogs va11halla`
 
 ### Examples
 - `[p]va11` - random line
