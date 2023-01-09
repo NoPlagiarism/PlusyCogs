@@ -146,6 +146,7 @@ class Va11Halla(commands.Cog):
     async def red_delete_data_for_user(self, *, requester, user_id):
         """Tnx for bobloy from Fox-V3
         (https://github.com/bobloy/Fox-V3/blob/db3ce301220604d537ea68a7fee10a20f4d50230/lseen/lseen.py)"""
+        await self.config.user_from_id(user_id).clear()
         all_members = await self.config.all_members()
         async for guild_id, guild_data in AsyncIter(all_members.items(), steps=100):
             if user_id in guild_data:
