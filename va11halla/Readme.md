@@ -1,10 +1,10 @@
 # va11halla
 > Random quotes from VN "[VA-11 HALL-A: Cyberpunk Bartender Action](https://store.steampowered.com/app/447530/)" by [Sukeban Games](https://sukeban.moe/)
 
-- [Examples](#Examples)
-- [Main command parameters](#Parameters)
-- [Default language](#Default language)
-- [va11-list command](#Lists of)
+- [Examples](#examples)
+- [Main command parameters](#parameters)
+- [Default language](#default-language)
+- [va11-list command](#lists-of)
 
 ### Examples
 - `[p]va11` - random line

@@ -1,9 +1,9 @@
 # exists
 > Cog with generators a-like This Does Not Exist.
 
-- [Generators](#List of generators)
-- [Generators blacklist](#Exclude generators in guild (server))
-- [Ultra-Disable NSFW](#Disable NSFW in NSFW channels)
+- [Generators](#list-of-generators)
+- [Generators blacklist](#exclude-generators-in-guild-server)
+- [Ultra-Disable NSFW](#disable-nsfw-in-nsfw-channels)
 
 
 ### Example
