@@ -5,7 +5,7 @@ class Settings:
     API_BASE_URL = "https://returnyoutubedislikeapi.com/"
     VOTES_URL = API_BASE_URL + "Votes"
 
-    DISPLAY_PER_RATIO = 5
+    DISPLAY_PER_RATIO = 6
     DISPLAY_RATIO_FULL = "█"
     DISPLAY_RATIO_EMPTY = " "
     DISPLAY_LIKE = "👍"
