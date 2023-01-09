@@ -1,8 +1,8 @@
 {
     "name": "ryd",
     "author": ["Albrt#3043"],
-    "description": "RYD cog scans every message for YouTube links and replies with likes/dislikes count",
-    "short": "Return Youtube Dislike",
+    "description": "\"Return YouTube Dislike\" cog scans every message for YouTube links and replies with likes/dislikes count",
+    "short": "Return YouTube Dislike",
     "install_msg": "Enjoy RYD access from Discord\nYou can read some docs here: <https://github.com/NoPlagiarism/PlusyCogs/blob/master/ryd/Readme.md>",
     "tags": ["ryd", "youtube", "returnyoutubedislike"],
     "type": "COG",
