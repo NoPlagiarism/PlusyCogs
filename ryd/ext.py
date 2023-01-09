@@ -1,9 +1,10 @@
 from redbot.core import commands, Config
+from redbot.core.utils import AsyncIter
 from .config import Settings
 import re
 import aiohttp
 from collections import namedtuple
-from typing import Optional
+from typing import Optional, Literal
 import discord
 from humanize import intcomma
 
@@ -40,6 +41,20 @@ class RYDCog(commands.Cog):
         self.config.register_guild(**default_guild)
         self.config.register_member(**default_member)
         self.config.register_channel(**default_channel)
+
+    async def red_delete_data_for_user(
+        self,
+        *,
+        requester: Literal["discord_deleted_user", "owner", "user", "user_strict"],
+        user_id: int,
+    ):
+        """Tnx for bobloy from Fox-V3
+        (https://github.com/bobloy/Fox-V3/blob/db3ce301220604d537ea68a7fee10a20f4d50230/lseen/lseen.py)"""
+        all_members = await self.config.all_members()
+        async for guild_id, guild_data in AsyncIter(all_members.items(), steps=100):
+            if user_id in guild_data:
+                await self.config.member_from_ids(guild_id, user_id).clear()
+
 
     @staticmethod
     def find_video_ids(text):
