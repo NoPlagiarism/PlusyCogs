@@ -10,7 +10,7 @@ votes_tuple = namedtuple("Votes", ['video_id', 'likes', 'dislikes'])
 
 
 class RYDCog(commands.Cog):
-    """'Return Youtube Dislikes' cog"""
+    """'Return YouTube Dislikes' cog"""
     def __init__(self, bot):
         self.bot = bot
         super(RYDCog, self).__init__()
@@ -78,7 +78,7 @@ class RYDCog(commands.Cog):
 
     @commands.command(aliases=("returnyoutubedislike", "ytdislikes"))
     async def ryd(self, ctx, url):
-        """Insert youtube video url or id as argument to get dislikes count"""
+        """Insert YouTube video url or id as argument to get dislikes count"""
         if not (video_id := self.find_video_ids(url)):
             video_id = [url]
         try:

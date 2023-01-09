@@ -1,7 +1,7 @@
 {
     "name": "ryd",
     "author": ["Albrt#3043"],
-    "description": "RYD cog scans every message for youtube links and replies with likes/dislikes count",
+    "description": "RYD cog scans every message for YouTube links and replies with likes/dislikes count",
     "short": "Return Youtube Dislike",
     "install_msg": "Enjoy RYD access from Discord",
     "tags": ["ryd", "youtube", "returnyoutubedislike"],
