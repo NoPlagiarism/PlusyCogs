@@ -5,8 +5,15 @@ import aiohttp
 from collections import namedtuple
 from typing import Optional
 import discord
+from enum import Enum
 
 votes_tuple = namedtuple("Votes", ['video_id', 'likes', 'dislikes'])
+
+
+class ChannelScan(Enum):
+    DISABLED = 0
+    ENABLED = 1
+    WHITELISTED = 2
 
 
 class RYDCog(commands.Cog):
@@ -16,17 +23,18 @@ class RYDCog(commands.Cog):
         super(RYDCog, self).__init__()
         self.config = Config.get_conf(self, identifier=1984027022015)  # RIP Nemtsov, Fuck Kadyrov
         default_global = {
-            "disabled_scan": False,
+            "enabled_scan": True,
             "ignore_max": Settings.IGNORE_MAX_REACHED  # True by default
         }
         default_guild = {
-            "disabled_scan": False
+            "enabled_scan": True,
+            "whitelist_mode": False
         }
         default_member = {
-            "disabled_scan": False
+            "enabled_scan": True
         }
         default_channel = {
-            "disabled_scan": False
+            "enabled_scan": ChannelScan.ENABLED
         }
         self.config.register_global(**default_global)
         self.config.register_guild(**default_guild)
@@ -93,18 +101,18 @@ class RYDCog(commands.Cog):
     async def should_ignore(self, message: discord.Message, *, edit: bool = False) -> bool:
         if edit:
             return True
-        if await self.config.disabled_scan():
+        if not await self.config.enabled_scan():
             return True
         guild = message.guild
         if guild is None or message.author.bot:
             return True
         if await self.bot.cog_disabled_in_guild(self, guild):
             return True
-        if await self.config.guild(guild).disabled_scan():
+        if not await self.config.guild(guild).enabled_scan():
             return True
-        if await self.config.channel(message.channel).disabled_scan():
+        if not await self.config.channel(message.channel).enabled_scan():
             return True
-        if await self.config.member(message.author).disabled_scan():
+        if not await self.config.member(message.author).enabled_scan():
             return True
         return False
 
@@ -137,10 +145,10 @@ class RYDCog(commands.Cog):
     @config_global.command(name="disable")
     async def global_disable_toggle(self, ctx):
         """Disable/Enable message scanning for the bot"""
-        old_value = await self.config.disabled_scan()
+        old_value = await self.config.enabled_scan()
         new_value = not old_value
-        await self.config.disabled_scan.set(new_value)
-        return await ctx.reply(" ".join(("Message scanning is", {False: "Enabled", True: "Disabled"}[new_value], "now")))
+        await self.config.enabled_scan.set(new_value)
+        return await ctx.reply(" ".join(("Message scanning is", {True: "Enabled", False: "Disabled"}[new_value], "now")))
 
     @ryd_config.group(name="me")
     @commands.guild_only()
@@ -150,10 +158,10 @@ class RYDCog(commands.Cog):
     @config_member.command(name="disable")
     async def member_disable_toggle(self, ctx):
         """Disable/Enable message scanning for the specific person"""
-        old_value = await self.config.member(ctx.author).disabled_scan()
+        old_value = await self.config.member(ctx.author).enabled_scan()
         new_value = not old_value
-        await self.config.member(ctx.author).disabled_scan.set(new_value)
-        return await ctx.reply(" ".join(("Message scanning is", {False: "Enabled", True: "Disabled"}[new_value], "now")))
+        await self.config.member(ctx.author).enabled_scan.set(new_value)
+        return await ctx.reply(" ".join(("Message scanning is", {True: "Enabled", False: "Disabled"}[new_value], "now")))
 
     @ryd_config.group("guild")
     @commands.admin()
@@ -164,17 +172,17 @@ class RYDCog(commands.Cog):
     @config_guild.command(name="disable")
     async def guild_disable_toggle(self, ctx):
         """Disable/Enable message scanning for guild"""
-        old_value = await self.config.guild(ctx.guild).disabled_scan()
+        old_value = await self.config.guild(ctx.guild).enabled_scan()
         new_value = not old_value
-        await self.config.guild(ctx.guild).disabled_scan.set(new_value)
-        return await ctx.reply(" ".join(("Message scanning is", {False: "Enabled", True: "Disabled"}[new_value], "now")))
+        await self.config.guild(ctx.guild).enabled_scan.set(new_value)
+        return await ctx.reply(" ".join(("Message scanning is", {True: "Enabled", False: "Disabled"}[new_value], "now")))
 
     @config_guild.command(name="channel")
     async def channel_disable_toggle(self, ctx, channel: discord.TextChannel = None):
         """Disable/Enable message scanning for channel"""
         if channel is None:
             channel = ctx.channel
-        old_value = await self.config.channel(channel).disabled_scan()
+        old_value = await self.config.channel(channel).enabled_scan()
         new_value = not old_value
-        await self.config.channel(channel).disabled_scan.set(new_value)
-        return await ctx.reply(" ".join(("Message scanning is", {False: "Enabled", True: "Disabled"}[new_value], "now")))
+        await self.config.channel(channel).enabled_scan.set(new_value)
+        return await ctx.reply(" ".join(("Message scanning is", {True: "Enabled", False: "Disabled"}[new_value], "now")))
