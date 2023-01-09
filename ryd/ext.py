@@ -5,6 +5,7 @@ import aiohttp
 from collections import namedtuple
 from typing import Optional
 import discord
+from humanize import intcomma
 
 votes_tuple = namedtuple("Votes", ['video_id', 'likes', 'dislikes'])
 
@@ -77,7 +78,7 @@ class RYDCog(commands.Cog):
         ratio = ratio_full * ratio_full_len + ratio_empty * (size - ratio_full_len)
         result = result.format(like=display_like, dislike=display_dislike,
                                ratio=ratio,
-                               likes=votes.likes, dislikes=votes.dislikes)
+                               likes=intcomma(votes.likes), dislikes=intcomma(votes.dislikes))
         return result
 
     async def get_readable_line_votes_by_ctx(self, ctx, votes: votes_tuple):
