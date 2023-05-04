@@ -4,4 +4,4 @@ __red_end_user_data_statement__ = "RYD stores preferences about turning off link
 
 
 def setup(bot):
-    bot.add_cog(RYDCog(bot))
+    await bot.add_cog(RYDCog(bot))

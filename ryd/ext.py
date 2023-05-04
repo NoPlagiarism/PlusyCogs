@@ -7,6 +7,9 @@ from collections import namedtuple
 from typing import Optional, Literal
 import discord
 from humanize import intcomma
+from redbot.core.i18n import Translator, cog_i18n
+
+_ = Translator("RYDCog", __file__)
 
 votes_tuple = namedtuple("Votes", ['video_id', 'likes', 'dislikes'])
 
@@ -17,6 +20,7 @@ class ChannelScan:
     WHITELISTED = 2
 
 
+@cog_i18n(_)
 class RYDCog(commands.Cog):
     """'Return YouTube Dislikes' cog"""
     def __init__(self, bot):
@@ -177,7 +181,7 @@ class RYDCog(commands.Cog):
         old_value = await self.config.enabled_scan()
         new_value = not old_value
         await self.config.enabled_scan.set(new_value)
-        return await ctx.reply(" ".join(("Message scanning is", {True: "Enabled", False: "Disabled"}[new_value], "now")))
+        return await ctx.reply(_("Message scanning is {} now").format({True: _("Enabled"), False: _("Disabled")}[new_value]))
 
     @ryd_config.group(name="me")
     @commands.guild_only()
@@ -190,7 +194,7 @@ class RYDCog(commands.Cog):
         old_value = await self.config.member(ctx.author).enabled_scan()
         new_value = not old_value
         await self.config.member(ctx.author).enabled_scan.set(new_value)
-        return await ctx.reply(" ".join(("Message scanning is", {True: "Enabled", False: "Disabled"}[new_value], "now")))
+        return await ctx.reply(_("Message scanning is {} now").format({True: _("Enabled"), False: _("Disabled")}[new_value]))
 
     @ryd_config.group("guild")
     @commands.admin()
@@ -204,7 +208,7 @@ class RYDCog(commands.Cog):
         old_value = await self.config.guild(ctx.guild).enabled_scan()
         new_value = not old_value
         await self.config.guild(ctx.guild).enabled_scan.set(new_value)
-        return await ctx.reply(" ".join(("Message scanning is", {True: "Enabled", False: "Disabled"}[new_value], "now")))
+        return await ctx.reply(_("Message scanning is {} now").format({True: _("Enabled"), False: _("Disabled")}[new_value]))
 
     @config_guild.command(name="whitelist")
     async def guild_whitelist_mode_toggle(self, ctx):
@@ -212,7 +216,7 @@ class RYDCog(commands.Cog):
         old_value = await self.config.guild(ctx.guild).whitelist_mode()
         new_value = not old_value
         await self.config.guild(ctx.guild).whitelist_mode.set(new_value)
-        return await ctx.reply(" ".join(("Whitelist mode is", {True: "Enabled", False: "Disabled"}[new_value], "now")))
+        return await ctx.reply(_("Whitelist mode is {} now").format({True: _("Enabled"), False: _("Disabled")}[new_value]))
 
     @config_guild.command(name="channel")
     async def channel_disable_toggle(self, ctx, channel: discord.TextChannel = None):
@@ -223,17 +227,17 @@ class RYDCog(commands.Cog):
         old_value = await self.config.channel(channel).enabled_scan()
         if old_value in (ChannelScan.ENABLED, ChannelScan.WHITELISTED) and not whitelist_mode:
             new_value = ChannelScan.DISABLED
-            str_new = "Disabled"
+            str_new = _("Disabled")
         elif old_value == ChannelScan.WHITELISTED and whitelist_mode:
             new_value = ChannelScan.ENABLED
-            str_new = "not Whitelisted"
+            str_new = _("not Whitelisted")
         elif old_value == ChannelScan.DISABLED and not whitelist_mode:
             new_value = ChannelScan.ENABLED
-            str_new = "Enabled"
+            str_new = _("Enabled")
         elif old_value in (ChannelScan.DISABLED, ChannelScan.ENABLED) and whitelist_mode:
             new_value = ChannelScan.WHITELISTED
-            str_new = "Whitelisted"
+            str_new = _("Whitelisted")
         else:
             return
         await self.config.channel(channel).enabled_scan.set(new_value)
-        return await ctx.reply(" ".join(("Message scanning is", str_new, "now")))
+        return await ctx.reply(_("Message scanning is {} now").format(str_new))

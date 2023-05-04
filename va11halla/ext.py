@@ -4,11 +4,14 @@ from .config import Settings
 from redbot.core import commands, data_manager, Config
 from redbot.core.utils import AsyncIter
 from redbot.vendored.discord.ext import menus
-from .reader import Va11HallaJSON, Va11DataManager, Va11ReaderException
+from .reader import Va11HallaJSON, Va11DataManager, CharacterNotFound, ScriptNotFound, ScriptLineDoesNotExists
 import json
 from math import ceil
 import random
 from typing import Optional
+from redbot.core.i18n import Translator, cog_i18n
+
+_ = Translator("Va11Halla", __file__)
 
 
 with open(Settings.ICONS_PATH, encoding="utf-8", mode="r") as f:
@@ -75,6 +78,7 @@ class DialEmbed(discord.Embed):
         self.update_embed(dial, ICONS[self.data.names[dial.character]])
 
 
+@cog_i18n(_)
 class Va11HallaMenu(menus.Menu):
     async def send_initial_message(self, ctx, channel):
         return await ctx.send(embed=self.va11_embed)
@@ -139,8 +143,16 @@ class Va11Halla(commands.Cog):
     async def cog_command_error(self, ctx: commands.Context, error: commands.CommandError):
         original = getattr(error, "original", None)
         if original:
-            if isinstance(original, Va11ReaderException):
-                return await ctx.reply(str(original))
+            if type(original) is CharacterNotFound:
+                if original.script:
+                    return await ctx.reply(_("Character {name} not found in script {script}").format(
+                        name=original.name, script=original.script))
+                return await ctx.reply(_("Character {name} not found").format(name=original.name))
+            elif type(original) is ScriptNotFound:
+                return await ctx.reply(_("Script {filename} not found").format(filename=original.filename))
+            elif type(original) is ScriptLineDoesNotExists:
+                return await ctx.reply(_("{filename} has {lines} lines").format(
+                    filename=original.script['filename'], lines=original.script['lines']))
         return await ctx.bot.on_command_error(ctx, error, unhandled_by_cog=True)
 
     async def red_delete_data_for_user(self, *, requester, user_id):
@@ -259,7 +271,7 @@ class Va11Halla(commands.Cog):
         for arg in args:
             if arg in self.readers.keys():
                 if arg not in (whitelist := await self.get_available_langs_from_ctx(ctx)):
-                    return await ctx.reply("Choose languages from here: " + ", ".join(whitelist))
+                    return await ctx.reply(_("Choose languages from here: ") + ", ".join(whitelist))
                 lang = arg
                 data = self.readers[lang]
             elif arg in data.scripts:
@@ -270,12 +282,12 @@ class Va11Halla(commands.Cog):
                 try:
                     line = int(arg)
                 except ValueError:
-                    return await ctx.reply("Wrong command usage")
+                    return await ctx.reply(_("Wrong command usage"))
 
         if character and line:
-            return await ctx.reply("Do not search character and line")
+            return await ctx.reply(_("Do not search character and line"))
         elif line and not script:
-            return await ctx.reply("Enter script firstly")
+            return await ctx.reply(_("Enter script firstly"))
 
         if script and line:
             dial = data.get_script_line(line_num=line, script_name=script)
@@ -298,7 +310,7 @@ class Va11Halla(commands.Cog):
     @commands.command(name="va11-list", aliases=("va11halla-list", "valhalla-list", "va11list", "va11hallalist"))
     async def va11halla_list(self, ctx, list_type: Optional[str] = None, page: Optional[int] = None):
         if list_type is None:
-            return await ctx.reply("Use as argument: scripts, characters, langs")
+            return await ctx.reply(_("Use as argument: scripts, characters, langs"))
         if page is None:
             page = 0
         else:
@@ -308,7 +320,7 @@ class Va11Halla(commands.Cog):
                     "scripts": self._list_scripts,
                     "langs": self._list_langs}[list_type]
         except KeyError:
-            return await ctx.reply("Use as argument: scripts, characters, langs")
+            return await ctx.reply(_("Use as argument: scripts, characters, langs"))
         if list_type == "langs":
             list_type = "languages"
         if asyncio.iscoroutinefunction(func):
@@ -334,12 +346,12 @@ class Va11Halla(commands.Cog):
     @conf_local.command(name="lang")
     async def local_lang(self, ctx, lang: str):
         if lang not in (langs := await self.get_available_langs_from_ctx(ctx)):
-            return await ctx.reply("Choose from those: " + ", ".join(langs))
+            return await ctx.reply(_("Choose from those: ") + ", ".join(langs))
         if ctx.guild is not None:
             await self.config.member(ctx.author).default_lang.set(lang)
         else:
             await self.config.user(ctx.author).default_lang.set(lang)
-        return await ctx.reply("Default language changed")
+        return await ctx.reply(_("Default language changed"))
 
     @conf_local.command(name="reactions")
     async def toggle_member_reactions(self, ctx):
@@ -351,7 +363,7 @@ class Va11Halla(commands.Cog):
             old_value = await self.config.user(ctx.author).reactions()
             new_value = not old_value
             await self.config.user(ctx.author).reactions.set(new_value)
-        return await ctx.reply(" ".join(("Reactions are", {True: "Enabled", False: "Disabled"}[new_value], "now")))
+        return await ctx.reply(_("Reactions are {} now").format({True: _("Enabled"), False: _("Disabled")}[new_value]))
 
     @va11halla_conf.group(name="guild")
     @commands.admin()
@@ -362,47 +374,47 @@ class Va11Halla(commands.Cog):
     @conf_guild.command(name="lang")
     async def guild_lang(self, ctx, lang: str):
         if lang not in self.readers.keys():
-            return await ctx.reply("Choose from those: " + ", ".join(self.readers.keys()))
+            return await ctx.reply(_("Choose from those: ") + ", ".join(self.readers.keys()))
         await self.config.guild(ctx.guild).default_lang.set(lang)
-        return await ctx.reply("Default language changed")
+        return await ctx.reply(_("Default language changed"))
 
     @conf_guild.command(name="whitelist")
     async def guild_whitelist(self, ctx, lang: str):
         if lang == "clear":
             await self.config.guild(ctx.guild).whitelist.set(None)
-            return await ctx.reply("Whitelist cleared")
+            return await ctx.reply(_("Whitelist cleared"))
         if lang not in self.readers.keys():
-            return await ctx.reply("Choose from those: " + ", ".join(self.readers.keys()))
+            return await ctx.reply(_("Choose from those: ") + ", ".join(self.readers.keys()))
         old_whitelist = await self.config.guild(ctx.guild).whitelist()
         if old_whitelist is None:
             await self.config.guild(ctx.guild).whitelist.set([lang])
-            return await ctx.reply("Language added to whitelist")
+            return await ctx.reply(_("Language added to whitelist"))
         if lang not in old_whitelist:
             old_whitelist.append(lang)
             await self.config.guild(ctx.guild).whitelist.set(old_whitelist)
-            return await ctx.reply("Language added to whitelist")
+            return await ctx.reply(_("Language added to whitelist"))
         else:
             old_whitelist.remove(lang)
             await self.config.guild(ctx.guild).whitelist.set(old_whitelist)
-            return await ctx.reply("Language removed from whitelist")
+            return await ctx.reply(_("Language removed from whitelist"))
 
     @conf_guild.command(name="reactions")
     async def toggle_guild_reactions(self, ctx):
         old_value = await self.config.guild(ctx.guild).reactions()
         new_value = not old_value
         await self.config.guild(ctx.guild).reactions.set(new_value)
-        return await ctx.reply(" ".join(("Reactions are", {True: "Enabled", False: "Disabled"}[new_value], "now")))
+        return await ctx.reply(_("Reactions are {} now").format({True: _("Enabled"), False: _("Disabled")}[new_value]))
 
     @conf_guild.command(name="show")
     async def guild_show(self, ctx):
         whitelist = ", ".join(await self.config.guild(ctx.guild).whitelist()) if await self.config.guild(ctx.guild).whitelist() is not None else "Disabled"
         guild_default = await self.config.guild(ctx.guild).default_lang()
-        reactions = "Enabled" if await self.config.guild(ctx.guild).reactions() else "Disabled"
+        reactions = _("Enabled") if await self.config.guild(ctx.guild).reactions() else _("Disabled")
 
         return await ctx.send(
-            "VA-11 HALL-A's Guild Settings\n"
-            f"Whitelist: {whitelist}\n"
-            f"Guild Default Language: {guild_default}\n"
-            f"Reactions are {reactions}"
+            _("VA-11 HALL-A's Guild Settings\n"
+              "Whitelist: {whitelist}\n"
+              "Guild Default Language: {guild_default}\n"
+              "Reactions are {reactions}").format(whitelist=whitelist, guild_default=guild_default, reactions=reactions)
         )
 

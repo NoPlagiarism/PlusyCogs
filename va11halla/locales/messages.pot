@@ -1,0 +1,88 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2023-05-04 22:39+0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: redgettext 3.4.2\n"
+
+#: va11halla\ext.py:147
+msgid "Character {name} not found in script {script}"
+msgstr ""
+
+#: va11halla\ext.py:149
+msgid "Character {name} not found"
+msgstr ""
+
+#: va11halla\ext.py:151
+msgid "Script {filename} not found"
+msgstr ""
+
+#: va11halla\ext.py:153
+msgid "{filename} has {lines} lines"
+msgstr ""
+
+#: va11halla\ext.py:273
+msgid "Choose languages from here: "
+msgstr ""
+
+#: va11halla\ext.py:284
+msgid "Wrong command usage"
+msgstr ""
+
+#: va11halla\ext.py:287
+msgid "Do not search character and line"
+msgstr ""
+
+#: va11halla\ext.py:289
+msgid "Enter script firstly"
+msgstr ""
+
+#: va11halla\ext.py:312 va11halla\ext.py:322
+msgid "Use as argument: scripts, characters, langs"
+msgstr ""
+
+#: va11halla\ext.py:348 va11halla\ext.py:376 va11halla\ext.py:386
+msgid "Choose from those: "
+msgstr ""
+
+#: va11halla\ext.py:353 va11halla\ext.py:378
+msgid "Default language changed"
+msgstr ""
+
+#: va11halla\ext.py:365 va11halla\ext.py:405
+msgid "Reactions are {} now"
+msgstr ""
+
+#: va11halla\ext.py:365 va11halla\ext.py:405 va11halla\ext.py:411
+msgid "Enabled"
+msgstr ""
+
+#: va11halla\ext.py:365 va11halla\ext.py:405 va11halla\ext.py:411
+msgid "Disabled"
+msgstr ""
+
+#: va11halla\ext.py:384
+msgid "Whitelist cleared"
+msgstr ""
+
+#: va11halla\ext.py:390 va11halla\ext.py:394
+msgid "Language added to whitelist"
+msgstr ""
+
+#: va11halla\ext.py:398
+msgid "Language removed from whitelist"
+msgstr ""
+
+#: va11halla\ext.py:414
+msgid ""
+"VA-11 HALL-A's Guild Settings\n"
+"Whitelist: {whitelist}\n"
+"Guild Default Language: {guild_default}\n"
+"Reactions are {reactions}"
+msgstr ""

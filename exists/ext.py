@@ -4,11 +4,14 @@ from .config import Settings
 from .api import OneImageGenerator, SeedGenerator, CityGenerator, EyeGenerator
 from aiohttp import ClientError
 import functools
+from redbot.core.i18n import Translator, cog_i18n
+
+_ = Translator("Exists", __file__)
 
 
 class NSFWCheckFailed(Exception):
     def __str__(self):
-        return "NO HORNY!!!"
+        return _("NO HORNY!!!")
 
 
 async def command_check_blacklist(ctx):
@@ -18,11 +21,12 @@ async def command_check_blacklist(ctx):
         return
     blacklist = await cog.config.guild(ctx.guild).blacklist()
     if command_name in blacklist:
-        await ctx.reply("Generator has been disabled on this server")
+        await ctx.reply(_("Generator has been disabled on this server"))
         return False
     return True
 
 
+@cog_i18n(_)
 class Exists(commands.Cog):
     """This x does not 'Exists' cog"""
     def __init__(self, bot: commands.Bot):
@@ -49,16 +53,16 @@ class Exists(commands.Cog):
     async def exists_blacklist(self, ctx, remove: str):
         if remove == "clear":
             await self.config.guild(ctx.guild).blacklist.set(list())
-            return await ctx.reply("Blacklist cleared")
+            return await ctx.reply(_("Blacklist cleared"))
         if remove not in Settings.ALIASES:
-            return await ctx.reply("Wrong generator")
+            return await ctx.reply(_("Wrong generator"))
         blacklist = await self.config.guild(ctx.guild).blacklist()
         if remove not in blacklist:
             blacklist.append(remove)
-            msg = "Generator added to blacklist"
+            msg = _("Generator added to blacklist")
         else:
             blacklist.remove(remove)
-            msg = "Generator removed from blacklist"
+            msg = _("Generator removed from blacklist")
         await self.config.guild(ctx.guild).blacklist.set(blacklist)
         return await ctx.reply(msg)
 
@@ -67,17 +71,14 @@ class Exists(commands.Cog):
         old_value = await self.config.guild(ctx.guild).nsfw()
         new_value = not old_value
         await self.config.guild(ctx.guild).nsfw.set(new_value)
-        return await ctx.reply("NSFW is " + {True: "enabled", False: "disabled"}[new_value] + " in this guild")
+        return await ctx.reply(_("NSFW is {} in this guild").format({True: "enabled", False: "disabled"}[new_value]))
 
     @conf_guild.command(name="show")
     async def guild_show(self, ctx):
-        blacklist = ", ".join(await self.config.guild(ctx.guild).blacklist()) if len(await self.config.guild(ctx.guild).blacklist()) > 0 else "Disabled"
-        nsfw = {True: "enabled", False: "disabled"}[await self.config.guild(ctx.guild).nsfw()]
-
+        blacklist = ", ".join(await self.config.guild(ctx.guild).blacklist()) if len(await self.config.guild(ctx.guild).blacklist()) > 0 else _("Disabled")
+        nsfw = {True: _("Enabled"), False: _("Disabled")}[await self.config.guild(ctx.guild).nsfw()]
         return await ctx.send(
-            "Exists Guild Settings\n"
-            f"Blacklist: {blacklist}\n"
-            f"NSFW is {nsfw}"
+            _("Exists Guild Settings\nBlacklist: {blacklist}\nNSFW is {nsfw}").format(blacklist=blacklist, nsfw=nsfw)
         )
 
     async def can_post_nsfw(self, ctx):
@@ -98,7 +99,7 @@ class Exists(commands.Cog):
         original = getattr(error, "original", None)
         if original:
             if isinstance(original, ClientError):
-                return ctx.reply("Unexpected " + str(type(original)) + " occurred. Try again")
+                return ctx.reply(_("Unexpected {} occurred. Try again").format(str(type(original))))
             elif isinstance(original, NSFWCheckFailed):
                 return ctx.reply(str(original))
         return await ctx.bot.on_command_error(ctx, error, unhandled_by_cog=True)
@@ -113,7 +114,9 @@ class Exists(commands.Cog):
     async def seed_generator(self, ctx, seed, meta):
         if seed is not None:
             if not (meta.MIN_SEED <= seed <= meta.SET_SIZE):
-                return await ctx.reply("Send a number in range from {} to {}".format(meta.MIN_SEED, meta.SET_SIZE))
+                return await ctx.reply(
+                    _("Send a number in range from {min_seed} to {set_size}").format(min_seed=meta.MIN_SEED, set_size=meta.SET_SIZE)
+                )
         generator = SeedGenerator(meta)
         if generator.nsfw:
             if not await self.can_post_nsfw(ctx):

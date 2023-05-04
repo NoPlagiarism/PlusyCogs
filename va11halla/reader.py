@@ -87,7 +87,7 @@ class ScriptNotFound(Va11ReaderException):
         self.filename = filename
 
     def __str__(self):
-        return f"Character {self.filename} not found"
+        return f"Script {self.filename} not found"
 
 
 class ScriptLineDoesNotExists(Va11ReaderException):

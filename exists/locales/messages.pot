@@ -1,0 +1,63 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2023-04-28 23:40+0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: redgettext 3.4.2\n"
+
+#: exists\ext.py:14
+msgid "NO HORNY!!!"
+msgstr ""
+
+#: exists\ext.py:24
+msgid "Generator has been disabled on this server"
+msgstr ""
+
+#: exists\ext.py:56
+msgid "Blacklist cleared"
+msgstr ""
+
+#: exists\ext.py:58
+msgid "Wrong generator"
+msgstr ""
+
+#: exists\ext.py:62
+msgid "Generator added to blacklist"
+msgstr ""
+
+#: exists\ext.py:65
+msgid "Generator removed from blacklist"
+msgstr ""
+
+#: exists\ext.py:74
+msgid "NSFW is {} in this guild"
+msgstr ""
+
+#: exists\ext.py:78 exists\ext.py:79
+msgid "Disabled"
+msgstr ""
+
+#: exists\ext.py:79
+msgid "Enabled"
+msgstr ""
+
+#: exists\ext.py:81
+msgid ""
+"Exists Guild Settings\n"
+"Blacklist: {blacklist}\n"
+"NSFW is {nsfw}"
+msgstr ""
+
+#: exists\ext.py:102
+msgid "Unexpected {} occurred. Try again"
+msgstr ""
+
+#: exists\ext.py:118
+msgid "Send a number in range from {min_seed} to {set_size}"
+msgstr ""

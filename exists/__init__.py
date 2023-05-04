@@ -4,5 +4,5 @@ __red_end_user_data_statement__ = """\"Exists\" cog does not collect any info ab
 But collects guild's blacklist and NSFW preference"""
 
 
-def setup(bot):
-    bot.add_cog(Exists(bot))
+async def setup(bot):
+    await bot.add_cog(Exists(bot))

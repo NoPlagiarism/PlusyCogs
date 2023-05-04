@@ -9,4 +9,4 @@ async def setup(bot):
     manager = Va11DataManager(path=data_manager.cog_data_path(raw_name=Va11Halla.__name__))
     await manager.async_validate_and_download()
     cog = Va11Halla(bot, manager=manager, validate_download=False)
-    bot.add_cog(cog)
+    await bot.add_cog(cog)
