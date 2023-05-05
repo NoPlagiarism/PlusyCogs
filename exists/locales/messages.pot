@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2023-04-28 23:40+0500\n"
+"POT-Creation-Date: 2023-05-05 00:15+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,11 @@ msgstr ""
 
 #: exists\ext.py:24
 msgid "Generator has been disabled on this server"
+msgstr ""
+
+#: exists\ext.py:31
+#, docstring
+msgid "This x does not 'Exists' cog"
 msgstr ""
 
 #: exists\ext.py:56
@@ -60,4 +65,86 @@ msgstr ""
 
 #: exists\ext.py:118
 msgid "Send a number in range from {min_seed} to {set_size}"
+msgstr ""
+
+#: exists\ext.py:129
+#, docstring
+msgid "Compilation of generators like thisxdoesnotexists"
+msgstr ""
+
+#: exists\ext.py:135 exists\ext.py:228
+#, docstring
+msgid "Cat generator from https://thiscatdoesnotexist.com"
+msgstr ""
+
+#: exists\ext.py:141 exists\ext.py:234
+#, docstring
+msgid "Horse generator from https://thishorsedoesnotexist.com"
+msgstr ""
+
+#: exists\ext.py:147 exists\ext.py:240
+#, docstring
+msgid "Art generator from https://thisartworkdoesnotexist.com"
+msgstr ""
+
+#: exists\ext.py:153 exists\ext.py:246
+#, docstring
+msgid "Human face generator from https://thispersondoesnotexist.com"
+msgstr ""
+
+#: exists\ext.py:159 exists\ext.py:252
+#, docstring
+msgid "Furry generator from https://thisfursonadoesnotexist.com"
+msgstr ""
+
+#: exists\ext.py:165 exists\ext.py:258
+#, docstring
+msgid "Pony generator from https://thisponydoesnotexist.net"
+msgstr ""
+
+#: exists\ext.py:171 exists\ext.py:264
+#, docstring
+msgid ""
+"Night sky generator from "
+"https://arthurfindelair.com/thisnightskydoesnotexist"
+msgstr ""
+
+#: exists\ext.py:177 exists\ext.py:270
+#, docstring
+msgid "Map generator from https://thismapdoesnotexist.com"
+msgstr ""
+
+#: exists\ext.py:183 exists\ext.py:276
+#, docstring
+msgid "Anime waifu generator from https://thiswaifudoesnotexist.net"
+msgstr ""
+
+#: exists\ext.py:189 exists\ext.py:282
+#, docstring
+msgid "Beach generator from https://thisbeachdoesnotexist.com"
+msgstr ""
+
+#: exists\ext.py:195 exists\ext.py:288
+#, docstring
+msgid "Sneaker generator from https://thissneakerdoesnotexist.com"
+msgstr ""
+
+#: exists\ext.py:201 exists\ext.py:294
+#, docstring
+msgid "Pepe generator from https://www.thispepedoesnotexist.co.uk"
+msgstr ""
+
+#: exists\ext.py:207 exists\ext.py:300
+#, docstring
+msgid "Satellite city shot generator from https://thiscitydoesnotexist.com"
+msgstr ""
+
+#: exists\ext.py:213 exists\ext.py:306
+#, docstring
+msgid "Eye generator from https://thiseyedoesnotexist.com/"
+msgstr ""
+
+#: exists\ext.py:220 exists\ext.py:313
+#, docstring
+msgid "Tits generators from https://thesetitsdonotexist.com/"
 msgstr ""

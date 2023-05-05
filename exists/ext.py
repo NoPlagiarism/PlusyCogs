@@ -174,7 +174,7 @@ class Exists(commands.Cog):
     @commands.check(command_check_blacklist)
     @exists.command(name="map", aliases=Settings.ALIASES['map'])
     async def map(self, ctx, seed: int = None):
-        """Map generator from http://thismapdoesnotexist.com"""
+        """Map generator from https://thismapdoesnotexist.com"""
         return await self.seed_generator(ctx, seed, Settings.Map)
 
     @commands.check(command_check_blacklist)
@@ -204,7 +204,7 @@ class Exists(commands.Cog):
     @commands.check(command_check_blacklist)
     @exists.command(name="city", aliases=Settings.ALIASES['city'])
     async def city(self, ctx):
-        """Satellite city shot generator from http://thiscitydoesnotexist.com"""
+        """Satellite city shot generator from https://thiscitydoesnotexist.com"""
         return await ctx.send(embed=await CityGenerator().get_embed())
 
     @commands.check(command_check_blacklist)
@@ -267,7 +267,7 @@ class Exists(commands.Cog):
         @commands.check(command_check_blacklist)
         @commands.command(name="map", aliases=Settings.ALIASES['map'])
         async def ex_map(self, ctx, seed: int = None):
-            """Map generator from http://thismapdoesnotexist.com"""
+            """Map generator from https://thismapdoesnotexist.com"""
             return await self.seed_generator(ctx, seed, Settings.Map)
 
         @commands.check(command_check_blacklist)
@@ -297,7 +297,7 @@ class Exists(commands.Cog):
         @commands.check(command_check_blacklist)
         @commands.command(name="city", aliases=Settings.ALIASES['city'])
         async def ex_city(self, ctx):
-            """Satellite city shot generator from http://thiscitydoesnotexist.com"""
+            """Satellite city shot generator from https://thiscitydoesnotexist.com"""
             return await ctx.send(embed=await CityGenerator().get_embed())
 
         @commands.check(command_check_blacklist)

@@ -78,7 +78,6 @@ class DialEmbed(discord.Embed):
         self.update_embed(dial, ICONS[self.data.names[dial.character]])
 
 
-@cog_i18n(_)
 class Va11HallaMenu(menus.Menu):
     async def send_initial_message(self, ctx, channel):
         return await ctx.send(embed=self.va11_embed)
@@ -106,6 +105,7 @@ class Va11HallaMenu(menus.Menu):
         return await self.message.edit(embed=self.va11_embed)
 
 
+@cog_i18n(_)
 class Va11Halla(commands.Cog):
     """'Va11Halla' Cog with quotes from 'VA-11 HALL-A: Cyberpunk Bartender Action'
     Dialogue data from https://github.com/NoPlagiarism/va11halla-dialogues

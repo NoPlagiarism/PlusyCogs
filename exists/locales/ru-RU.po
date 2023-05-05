@@ -22,6 +22,11 @@ msgstr "ХОРНИ-БОНЬК!!!"
 msgid "Generator has been disabled on this server"
 msgstr "Генератор был выключен на этом сервере"
 
+#: exists\ext.py:31
+#, docstring
+msgid "This x does not 'Exists' cog"
+msgstr "This x does not 'Exists' cog"
+
 #: exists\ext.py:56
 msgid "Blacklist cleared"
 msgstr "Чёрный список очищен"
@@ -67,3 +72,85 @@ msgstr "Внезапно, {}. Попробуйте ещё раз"
 #: exists\ext.py:118
 msgid "Send a number in range from {min_seed} to {set_size}"
 msgstr "Нужен номер от {min_seed} до {set_size}"
+
+#: exists\ext.py:129
+#, docstring
+msgid "Compilation of generators like thisxdoesnotexists"
+msgstr "Подборка генераторов а-ля thisxdoesnotexists"
+
+#: exists\ext.py:135 exists\ext.py:228
+#, docstring
+msgid "Cat generator from https://thiscatdoesnotexist.com"
+msgstr "Генератор котов с https://thiscatdoesnotexist.com"
+
+#: exists\ext.py:141 exists\ext.py:234
+#, docstring
+msgid "Horse generator from https://thishorsedoesnotexist.com"
+msgstr "Генератор лошадей с https://thishorsedoesnotexist.com"
+
+#: exists\ext.py:147 exists\ext.py:240
+#, docstring
+msgid "Art generator from https://thisartworkdoesnotexist.com"
+msgstr "Генератор картин с https://thisartworkdoesnotexist.com"
+
+#: exists\ext.py:153 exists\ext.py:246
+#, docstring
+msgid "Human face generator from https://thispersondoesnotexist.com"
+msgstr "Генератор человеческих лиц с https://thispersondoesnotexist.com"
+
+#: exists\ext.py:159 exists\ext.py:252
+#, docstring
+msgid "Furry generator from https://thisfursonadoesnotexist.com"
+msgstr "Генератор фуррей с https://thisfursonadoesnotexist.com"
+
+#: exists\ext.py:165 exists\ext.py:258
+#, docstring
+msgid "Pony generator from https://thisponydoesnotexist.net"
+msgstr "Генератор поней с https://thisponydoesnotexist.net"
+
+#: exists\ext.py:171 exists\ext.py:264
+#, docstring
+msgid ""
+"Night sky generator from "
+"https://arthurfindelair.com/thisnightskydoesnotexist"
+msgstr "Генератор ночного неба с https://arthurfindelair.com/thisnightskydoesnotexist"
+
+#: exists\ext.py:177 exists\ext.py:270
+#, docstring
+msgid "Map generator from https://thismapdoesnotexist.com"
+msgstr "Генератор карт с https://thismapdoesnotexist.com"
+
+#: exists\ext.py:183 exists\ext.py:276
+#, docstring
+msgid "Anime waifu generator from https://thiswaifudoesnotexist.net"
+msgstr "Генератор Аниме-Вайфу с https://thiswaifudoesnotexist.net"
+
+#: exists\ext.py:189 exists\ext.py:282
+#, docstring
+msgid "Beach generator from https://thisbeachdoesnotexist.com"
+msgstr "Генератор пляжа с https://thisbeachdoesnotexist.com"
+
+#: exists\ext.py:195 exists\ext.py:288
+#, docstring
+msgid "Sneaker generator from https://thissneakerdoesnotexist.com"
+msgstr "Генератор кроссовок с https://thissneakerdoesnotexist.com"
+
+#: exists\ext.py:201 exists\ext.py:294
+#, docstring
+msgid "Pepe generator from https://www.thispepedoesnotexist.co.uk"
+msgstr "Генератор Pepe с https://www.thispepedoesnotexist.co.uk"
+
+#: exists\ext.py:207 exists\ext.py:300
+#, docstring
+msgid "Satellite city shot generator from https://thiscitydoesnotexist.com"
+msgstr "https://thiscitydoesnotexist.com"
+
+#: exists\ext.py:213 exists\ext.py:306
+#, docstring
+msgid "Eye generator from https://thiseyedoesnotexist.com/"
+msgstr "Генератор глаз с https://thiseyedoesnotexist.com/"
+
+#: exists\ext.py:220 exists\ext.py:313
+#, docstring
+msgid "Tits generators from https://thesetitsdonotexist.com/"
+msgstr "Генератор сись с https://thesetitsdonotexist.com/"
