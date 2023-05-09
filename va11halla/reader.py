@@ -1,13 +1,15 @@
+import asyncio
 import os.path
 import random
 import json
 from time import time
+import logging
 from .config import Settings
 
-import urllib.request
 import aiohttp
 
 random.seed(int(time()))
+log = logging.getLogger("red.PlusyCogs.va11halla")
 
 
 class Script:
@@ -244,48 +246,36 @@ class Va11DataManager:
             self.langs = json.load(f)
 
     def validate(self):
-        result = True
         for lang, files in self.langs.items():
             for file in files.keys():
                 if not os.path.exists(os.path.join(self.path, lang, file)):
-                    result = False
-                    break
-        return result
+                    return False
+        return True
 
     @staticmethod
-    def _get_json_from_url(url):
-        with urllib.request.urlopen(url) as res:
-            return json.loads(res.read().decode(res.headers.get_content_charset("utf-8")))
+    async def async_download_one(session: aiohttp.ClientSession, url, path):
+        async with session.get(url) as resp:
+            json_ = await resp.json(encoding="utf-8", content_type='text/plain')
+        with open(path, mode="w+", encoding="utf-8") as f:
+            json.dump(json_, f, ensure_ascii=False)
 
     async def async_download(self):
         self.makedirs()
         async with aiohttp.ClientSession() as session:
+            to_download = list()
             for lang, name_urls in self.langs.items():
                 for name, url in name_urls.items():
-                    async with session.get(url) as resp:
-                        json_ = await resp.json(encoding="utf-8", content_type='text/plain')
-                    with open(os.path.join(self.path, lang, name), mode='w+', encoding="utf-8") as f:
-                        json.dump(json_, f)
+                    to_download.append(self.async_download_one(session, url, os.path.join(self.path, lang, name)))
+            await asyncio.gather(*to_download)
 
     def makedirs(self):
         for lang in self.langs.keys():
             if not os.path.exists(os.path.join(self.path, lang)):
                 os.makedirs(os.path.join(self.path, lang))
 
-    def download(self):
-        self.makedirs()
-        for lang, name_urls in self.langs.items():
-            for name, url in name_urls.items():
-                json_ = self._get_json_from_url(url)
-                with open(os.path.join(self.path, lang, name), mode='w+', encoding="utf-8") as f:
-                    json.dump(json_, f)
-
-    def validate_and_download(self):
-        if not self.validate():
-            self.download()
-
     async def async_validate_and_download(self):
         if not self.validate():
+            log.info("Some files are missing. Downloading all files")
             await self.async_download()
 
     def get_all_readers(self):
