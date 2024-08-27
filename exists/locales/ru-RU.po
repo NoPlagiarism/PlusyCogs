@@ -88,11 +88,6 @@ msgstr "Генератор котов с https://thiscatdoesnotexist.com"
 msgid "Horse generator from https://thishorsedoesnotexist.com"
 msgstr "Генератор лошадей с https://thishorsedoesnotexist.com"
 
-#: exists\ext.py:147 exists\ext.py:240
-#, docstring
-msgid "Art generator from https://thisartworkdoesnotexist.com"
-msgstr "Генератор картин с https://thisartworkdoesnotexist.com"
-
 #: exists\ext.py:153 exists\ext.py:246
 #, docstring
 msgid "Human face generator from https://thispersondoesnotexist.com"

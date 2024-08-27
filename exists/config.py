@@ -1,11 +1,10 @@
 class Settings:
-    IMG_NAME = "not_hedgehog.png"  # OneImageGenerator and e.t.c (Renaming discord attachment (cat, art, horse, person)
+    IMG_NAME = "not_hedgehog.png"  # OneImageGenerator and e.t.c (Renaming discord attachment (cat, horse, person)
     ONLY_COMMAND_GROUP = True    # Allow commands a-like [p]waifu or not. [p]exists will be working anyway
     ALIASES = {
         "exists": ("thisdoesnotexists", "doesnotexists", "notexists"),
         "cat": ("thiscatdoesnotexist", ),
         "horse": ("thishorsedoesnotexist", ),
-        "art": ("artwork", "thisartworkdoesnotexist"),
         "person": ("human", "thispersondoesnotexist"),
         "fursona": ("furry", "thisfursonadoesnotexist"),
         "nightsky": ("sky", "night", "night_sky"),
@@ -19,7 +18,6 @@ class Settings:
         "pepe": ("thispepedoesnotexist", )
     }
 
-    ART = 'OneImageGenerator(name="This Artwork Does Not Exist", url="https://thisartworkdoesnotexist.com/")'
     CAT = 'OneImageGenerator(name="This Cat Does Not Exist", url="https://thiscatdoesnotexist.com/")'
     HORSE = 'OneImageGenerator(name="This Horse Does Not Exist", url="https://thishorsedoesnotexist.com/")'
     PERSON = 'OneImageGenerator(name="This Person Does Not Exist", url="https://thispersondoesnotexist.com", img_url="https://thispersondoesnotexist.com/image")'

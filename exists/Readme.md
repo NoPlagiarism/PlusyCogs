@@ -19,7 +19,6 @@
 
 - `cat` from [thiscatdoesnotexist.com](https://thiscatdoesnotexist.com)
 - `horse` from [thishorsedoesnotexist.com](https://thishorsedoesnotexist.com)
-- `art` from [thisartworkdoesnotexist.com](https://thisartworkdoesnotexist.com)
 - `person` from [thispersondoesnotexist.com](https://thispersondoesnotexist.com)
 - `fursona` from [thisfursonadoesnotexist.com](https://thisfursonadoesnotexist.com)
 - `pony` from [thisponydoesnotexist.net](https://thisponydoesnotexist.net)
