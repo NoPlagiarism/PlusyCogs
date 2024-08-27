@@ -88,7 +88,7 @@ class Settings:
 
     class Pepe:
         NAME = "This Pepe Does Not Exists"
-        URL = "https://www.thispepedoesnotexist.co.uk/"
+        URL = "https://github.com/meesey"
 
         SET_SIZE: int = 9759
         MIN_SEED: int = 1
