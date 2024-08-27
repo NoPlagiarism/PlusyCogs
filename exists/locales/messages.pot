@@ -77,11 +77,6 @@ msgstr ""
 msgid "Cat generator from https://thiscatdoesnotexist.com"
 msgstr ""
 
-#: exists\ext.py:141 exists\ext.py:234
-#, docstring
-msgid "Horse generator from https://thishorsedoesnotexist.com"
-msgstr ""
-
 #: exists\ext.py:153 exists\ext.py:246
 #, docstring
 msgid "Human face generator from https://thispersondoesnotexist.com"

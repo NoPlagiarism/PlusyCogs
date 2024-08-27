@@ -136,12 +136,6 @@ class Exists(commands.Cog):
         return await self.one_image_generator(ctx, Settings.CAT)
 
     @commands.check(command_check_blacklist)
-    @exists.command(name="horse", aliases=Settings.ALIASES['horse'])
-    async def horse(self, ctx):
-        """Horse generator from https://thishorsedoesnotexist.com"""
-        return await self.one_image_generator(ctx, Settings.HORSE)
-
-    @commands.check(command_check_blacklist)
     @exists.command(name="person", aliases=Settings.ALIASES['person'])
     async def person(self, ctx):
         """Human face generator from https://thispersondoesnotexist.com"""
@@ -221,12 +215,6 @@ class Exists(commands.Cog):
         async def ex_cat(self, ctx):
             """Cat generator from https://thiscatdoesnotexist.com"""
             return await self.one_image_generator(ctx, Settings.CAT)
-
-        @commands.check(command_check_blacklist)
-        @commands.command(name="horse", aliases=Settings.ALIASES['horse'])
-        async def ex_horse(self, ctx):
-            """Horse generator from https://thishorsedoesnotexist.com"""
-            return await self.one_image_generator(ctx, Settings.HORSE)
 
         @commands.check(command_check_blacklist)
         @commands.command(name="person", aliases=Settings.ALIASES['person'])
