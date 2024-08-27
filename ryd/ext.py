@@ -1,4 +1,5 @@
 from redbot.core import commands, Config
+from redbot.core.bot import Red
 from redbot.core.utils import AsyncIter
 from .config import Settings
 import re
@@ -23,8 +24,8 @@ class ChannelScan:
 @cog_i18n(_)
 class RYDCog(commands.Cog):
     """'Return YouTube Dislikes' cog"""
-    def __init__(self, bot):
-        self.bot = bot
+    def __init__(self, bot: Red):
+        self.bot: Red = bot
         super(RYDCog, self).__init__()
         self.config = Config.get_conf(self, identifier=1984027022015)  # RIP Nemtsov, Fuck Kadyrov
         default_global = {
@@ -146,6 +147,11 @@ class RYDCog(commands.Cog):
             if channel_scan == ChannelScan.DISABLED:
                 return True
         if not await self.config.member(message.author).enabled_scan():
+            return True
+        prefix = await self.bot.get_prefix(message)
+        if isinstance(prefix, list):
+            prefix = prefix[0]  # XXX: needs to be fixed
+        if any([message.content.startswith(prefix + x) for x in ("ryd", "returnyoutubedislike", "ytdislikes")]):
             return True
         return False
 
