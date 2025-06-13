@@ -1,5 +1,5 @@
 class Settings:
-    YT_ID_REGEX_TEXT = r'((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed\/|v\/)?)(?P<videoId>[\w\-]+)(\S+)?'
+    YT_ID_REGEX_TEXT = r'((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube\.com|youtu\.be))(\/(?:[\w\-]+\?v=|embed\/|v\/|shorts\/)?)(?P<videoId>[\w\-]+)(\S+)?'
 
     REQUEST_HEADERS = {"User-Agent": "Red-DiscordBot RYDCog by NoPlagiarism"}
     API_BASE_URL = "https://returnyoutubedislikeapi.com/"

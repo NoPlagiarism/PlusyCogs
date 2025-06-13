@@ -168,8 +168,11 @@ class RYDCog(commands.Cog):
         lines = list()
         for video_id in video_ids:
             votes = await self.get_votes(video_id)
+            if votes is None:
+                continue
             lines.append(await self.get_readable_line_votes_by_ctx(await self.bot.get_context(message), votes))
-        return await message.reply("\n".join(lines))
+        if lines:
+            return await message.reply("\n".join(lines))
 
     @commands.group(name="ryd-config")
     async def ryd_config(self, ctx):
