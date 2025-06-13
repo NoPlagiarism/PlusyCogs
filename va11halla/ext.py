@@ -15,7 +15,7 @@ _ = Translator("Va11Halla", __file__)
 
 
 with open(Settings.ICONS_PATH, encoding="utf-8", mode="r") as f:
-    ICONS = json.load(f)["char_icons"]  # TODO: fix it
+    ICONS = json.load(f)["char_icons"]  # TODO: Still fix needed... I guess
 
 
 def progress_bar(value, max_value, size=10):
