@@ -1,5 +1,5 @@
 class Settings:
-    IMG_NAME = "not_hedgehog.png"  # OneImageGenerator and e.t.c (Renaming discord attachment (cat, tits, person)
+    IMG_NAME = "not_hedgehog.png"  # OneImageGenerator and e.t.c (Renaming discord attachment (person)
     ONLY_COMMAND_GROUP = True    # Allow commands a-like [p]waifu or not. [p]exists will be working anyway
     ALIASES = {
         "exists": ("thisdoesnotexists", "doesnotexists", "notexists"),
@@ -12,14 +12,18 @@ class Settings:
         "waifu": ("thiswaifudoesnotexist", ),
         "beach": ("thisbeachdoesnotexist", ),
         "pony": ("thisponydoesnotexist", "thismlpdoesnotexists"),
-        "eye": ("thiseyedoesnotexist", ),
-        "sneaker": ("thissneakerdoesnotexist", ),
         "pepe": ("thispepedoesnotexist", )
     }
+    
+    # TODO: Add projects below
+    # https://www.thisgraffitidoesnotexist.com/
+    # https://www.thisautomobiledoesnotexist.com/
+    # https://www.thisautomobiledoesnotexist.com/
+    # https://thismountaindoesnotexist.com/
+    
 
-    CAT = 'OneImageGenerator(name="This Cat Does Not Exist", url="https://thiscatdoesnotexist.com/")'  # TODO: Replace to https://thesecatsdonotexist.com/
+    # CAT = 'OneImageGenerator(name="This Cat Does Not Exist", url="https://thiscatdoesnotexist.com/")'  # TODO: Replace to https://thesecatsdonotexist.com/
     PERSON = 'OneImageGenerator(name="This Person Does Not Exist", url="https://thispersondoesnotexist.com", img_url="https://thispersondoesnotexist.com/image")'
-    TITS = 'OneImageGenerator(name="These tits do not exist", url="https://thesetitsdonotexist.com/", img_url="https://thesetitsdonotexist.com/img.png", nsfw=True)'
 
     """class SeedGenerator: NAME, URL, SET_SIZE, MIN_SEED, SEED_LEN, SOURCE_URL"""
 
@@ -76,15 +80,6 @@ class Settings:
         MIN_SEED: int = 1
         SEED_LEN: int = 4
         SOURCE_URL = "https://thisbeachdoesnotexist.com/data/seeds-075/{}.jpg"
-
-    class Sneaker:
-        NAME = "This Sneaker Does Not Exists"
-        URL = "https://thissneakerdoesnotexist.com"
-
-        SET_SIZE: int = 2000
-        MIN_SEED: int = 0
-        SEED_LEN: int = 1
-        SOURCE_URL = "https://thissneakerdoesnotexist.com/wp-content/plugins/sneaker-plugin/imsout2/3-3-2-{}.jpg"
 
     class Pepe:
         NAME = "This Pepe Does Not Exists"

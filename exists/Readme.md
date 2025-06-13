@@ -17,7 +17,7 @@
 
 ### List of generators
 
-- `cat` from [thiscatdoesnotexist.com](https://thiscatdoesnotexist.com)
+- ~~ `cat` from [thiscatdoesnotexist.com](https://thiscatdoesnotexist.com) ~~ *Soon to be replaced*
 - `person` from [thispersondoesnotexist.com](https://thispersondoesnotexist.com)
 - `fursona` from [thisfursonadoesnotexist.com](https://thisfursonadoesnotexist.com)
 - `pony` from [thisponydoesnotexist.net](https://thisponydoesnotexist.net)
@@ -25,11 +25,8 @@
 - `map` from [thismapdoesnotexist.com](https://thismapdoesnotexist.com)
 - `waifu` from [thiswaifudoesnotexist.net](https://thiswaifudoesnotexist.net)
 - `beach` from [thisbeachdoesnotexist.com](https://thisbeachdoesnotexist.com)
-- `sneaker` from [thissneakerdoesnotexist.com](https://thissneakerdoesnotexist.com)
 - `pepe` from [thispepedoesnotexist.co.uk](https://thispepedoesnotexist.co.uk)
 - `city` from [thiscitydoesnotexist.com](https://thiscitydoesnotexist.com)
-- `eye` from [thiseyedoesnotexist.com](https://thiseyedoesnotexist.com)
-- `tits` [NSFW] from [thesetitsdonotexist.com](https://thesetitsdonotexist.com)
 
 ### Exclude generators in guild (server)
 

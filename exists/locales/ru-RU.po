@@ -120,11 +120,6 @@ msgstr "Генератор Аниме-Вайфу с https://thiswaifudoesnotexis
 msgid "Beach generator from https://thisbeachdoesnotexist.com"
 msgstr "Генератор пляжа с https://thisbeachdoesnotexist.com"
 
-#: exists\ext.py:195 exists\ext.py:288
-#, docstring
-msgid "Sneaker generator from https://thissneakerdoesnotexist.com"
-msgstr "Генератор кроссовок с https://thissneakerdoesnotexist.com"
-
 #: exists\ext.py:201 exists\ext.py:294
 #, docstring
 msgid "Pepe generator from https://www.thispepedoesnotexist.co.uk"
@@ -134,13 +129,3 @@ msgstr "Генератор Pepe с https://www.thispepedoesnotexist.co.uk"
 #, docstring
 msgid "Satellite city shot generator from https://thiscitydoesnotexist.com"
 msgstr "https://thiscitydoesnotexist.com"
-
-#: exists\ext.py:213 exists\ext.py:306
-#, docstring
-msgid "Eye generator from https://thiseyedoesnotexist.com/"
-msgstr "Генератор глаз с https://thiseyedoesnotexist.com/"
-
-#: exists\ext.py:220 exists\ext.py:313
-#, docstring
-msgid "Tits generators from https://thesetitsdonotexist.com/"
-msgstr "Генератор сись с https://thesetitsdonotexist.com/"

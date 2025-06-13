@@ -1,7 +1,7 @@
 import discord
 from redbot.core import commands, Config
 from .config import Settings
-from .api import OneImageGenerator, SeedGenerator, CityGenerator, EyeGenerator
+from .api import OneImageGenerator, SeedGenerator, CityGenerator
 from aiohttp import ClientError
 import functools
 from redbot.core.i18n import Translator, cog_i18n
@@ -129,11 +129,11 @@ class Exists(commands.Cog):
         """Compilation of generators like thisxdoesnotexists"""
         pass
 
-    @commands.check(command_check_blacklist)
-    @exists.command(name="cat", aliases=Settings.ALIASES['cat'])
-    async def cat(self, ctx):
-        """Cat generator from https://thiscatdoesnotexist.com"""
-        return await self.one_image_generator(ctx, Settings.CAT)
+    # @commands.check(command_check_blacklist)
+    # @exists.command(name="cat", aliases=Settings.ALIASES['cat'])
+    # async def cat(self, ctx):
+    #     """Cat generator from https://thiscatdoesnotexist.com"""
+    #     return await self.one_image_generator(ctx, Settings.CAT)
 
     @commands.check(command_check_blacklist)
     @exists.command(name="person", aliases=Settings.ALIASES['person'])
@@ -178,12 +178,6 @@ class Exists(commands.Cog):
         return await self.seed_generator(ctx, seed, Settings.Beach)
 
     @commands.check(command_check_blacklist)
-    @exists.command(name="sneaker", aliases=Settings.ALIASES['sneaker'])
-    async def sneaker(self, ctx, seed: int = None):
-        """Sneaker generator from https://thissneakerdoesnotexist.com"""
-        return await self.seed_generator(ctx, seed, Settings.Sneaker)
-
-    @commands.check(command_check_blacklist)
     @exists.command(name="pepe", aliases=Settings.ALIASES['pepe'])
     async def pepe(self, ctx, seed: int = None):
         """Pepe generator from https://www.thispepedoesnotexist.co.uk"""
@@ -195,26 +189,12 @@ class Exists(commands.Cog):
         """Satellite city shot generator from https://thiscitydoesnotexist.com"""
         return await ctx.send(embed=await CityGenerator().get_embed())
 
-    @commands.check(command_check_blacklist)
-    @exists.command(aliases=("thiseyedoesnotexist", ))
-    async def eye(self, ctx):
-        """Eye generator from https://thiseyedoesnotexist.com/"""
-        return await ctx.send(embed=await EyeGenerator().get_embed())
-
-    @commands.check(command_check_blacklist)
-    @commands.is_nsfw()
-    @exists.command(aliases=("boobs", "thesetitsdonotexist"))
-    async def tits(self, ctx):
-        """Tits generators from https://thesetitsdonotexist.com/"""
-        # JUST FKING KILL ME, LMFAO XD
-        return await self.one_image_generator(ctx, Settings.TITS)
-
     if not Settings.ONLY_COMMAND_GROUP:
-        @commands.check(command_check_blacklist)
-        @commands.command(name="cat", aliases=Settings.ALIASES['cat'])
-        async def ex_cat(self, ctx):
-            """Cat generator from https://thiscatdoesnotexist.com"""
-            return await self.one_image_generator(ctx, Settings.CAT)
+        # @commands.check(command_check_blacklist)
+        # @commands.command(name="cat", aliases=Settings.ALIASES['cat'])
+        # async def ex_cat(self, ctx):
+        #     """Cat generator from https://thiscatdoesnotexist.com"""
+        #     return await self.one_image_generator(ctx, Settings.CAT)
 
         @commands.check(command_check_blacklist)
         @commands.command(name="person", aliases=Settings.ALIASES['person'])
@@ -259,12 +239,6 @@ class Exists(commands.Cog):
             return await self.seed_generator(ctx, seed, Settings.Beach)
 
         @commands.check(command_check_blacklist)
-        @commands.command(name="sneaker", aliases=Settings.ALIASES['sneaker'])
-        async def ex_sneaker(self, ctx, seed: int = None):
-            """Sneaker generator from https://thissneakerdoesnotexist.com"""
-            return await self.seed_generator(ctx, seed, Settings.Sneaker)
-
-        @commands.check(command_check_blacklist)
         @commands.command(name="pepe", aliases=Settings.ALIASES['pepe'])
         async def ex_pepe(self, ctx, seed: int = None):
             """Pepe generator from https://www.thispepedoesnotexist.co.uk"""
@@ -275,17 +249,3 @@ class Exists(commands.Cog):
         async def ex_city(self, ctx):
             """Satellite city shot generator from https://thiscitydoesnotexist.com"""
             return await ctx.send(embed=await CityGenerator().get_embed())
-
-        @commands.check(command_check_blacklist)
-        @commands.command(aliases=("thiseyedoesnotexist",))
-        async def ex_eye(self, ctx):
-            """Eye generator from https://thiseyedoesnotexist.com/"""
-            return await ctx.send(embed=await EyeGenerator().get_embed())
-
-        @commands.check(command_check_blacklist)
-        @commands.is_nsfw()
-        @commands.command(aliases=("boobs", "thesetitsdonotexist"))
-        async def tits(self, ctx):
-            """Tits generators from https://thesetitsdonotexist.com/"""
-            # PLS KILL ME!
-            return await self.one_image_generator(ctx, Settings.TITS)

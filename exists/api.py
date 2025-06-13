@@ -82,7 +82,7 @@ class SeedGenerator(GetGenerator):
     meta: SeedMeta
 
     def __init__(self, meta):
-        kwargs = {"url": meta.URL, "name": meta.NAME, "nsfw": meta.NSFW}
+        kwargs = {"url": meta.URL, "name": meta.NAME, "nsfw": False}  # XXX: Lol, no NSFW gens for now
         super(SeedGenerator, self).__init__(**kwargs)
         self.meta = meta
 
@@ -122,22 +122,5 @@ class CityGenerator(GetGenerator):
         embed = discord.Embed()
         embed.set_author(name="This City Does Not Exist", url="http://thiscitydoesnotexist.com/")
         embed.set_footer(text="Web: http://thiscitydoesnotexist.com/")
-        embed.set_image(url=await self.get_image())
-        return embed
-
-
-class EyeGenerator(GetGenerator):
-    """Just https://thiseyedoesnotexist.com/"""
-    async def get_image(self):
-        """Get image url from redirect"""
-        async with aiohttp.ClientSession() as session:
-            async with session.get("https://thiseyedoesnotexist.com/random/", allow_redirects=False) as resp:
-                random_img_url = resp.headers["Location"]
-        return "https://thiseyedoesnotexist.com/static/imgs/{}.png".format(random_img_url.split("/")[-1])
-
-    async def get_embed(self) -> Embed:
-        embed = discord.Embed()
-        embed.set_author(name="This Eye Does Not Exist", url="http://thiseyedoesnotexist.com/")
-        embed.set_footer(text="Web: http://thiseyedoesnotexist.com/")
         embed.set_image(url=await self.get_image())
         return embed
