@@ -94,7 +94,10 @@ class RYDCog(commands.Cog):
             display_dislike = Settings.DISPLAY_DISLIKE
         result = "{like} {likes} `{ratio}` {dislikes} {dislike}"
         size = per_ratio * 2
-        ratio_full_len = round((votes.likes / (votes.likes + votes.dislikes)) * size)
+        total_votes = votes.likes + votes.dislikes
+        # The API returns 0/0 for videos it has no rating data for (fresh uploads,
+        # hidden ratings), which used to raise ZeroDivisionError
+        ratio_full_len = round((votes.likes / total_votes) * size) if total_votes else 0
         ratio = ratio_full * ratio_full_len + ratio_empty * (size - ratio_full_len)
         result = result.format(like=display_like, dislike=display_dislike,
                                ratio=ratio,
@@ -166,11 +169,13 @@ class RYDCog(commands.Cog):
                 return
             video_ids = video_ids[:Settings.MAX_DISPLAYED]
         lines = list()
+        # get_context() is only needed once per message, not once per video
+        ctx = await self.bot.get_context(message)
         for video_id in video_ids:
             votes = await self.get_votes(video_id)
             if votes is None:
                 continue
-            lines.append(await self.get_readable_line_votes_by_ctx(await self.bot.get_context(message), votes))
+            lines.append(await self.get_readable_line_votes_by_ctx(ctx, votes))
         if lines:
             return await message.reply("\n".join(lines))
 
